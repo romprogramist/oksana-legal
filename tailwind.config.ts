@@ -1,16 +1,38 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        primary: {
+          DEFAULT: "#0D5E5E",
+          light: "#1A7A7A",
+          dark: "#094A4A",
+        },
+        accent: {
+          DEFAULT: "#C9A99B",
+          light: "#D9C4B9",
+        },
+        background: "#F2F0ED",
+        surface: "#FFFFFF",
+        text: {
+          primary: "#1A1A1A",
+          secondary: "#6B7280",
+        },
+      },
+      fontFamily: {
+        sans: ["Inter", "system-ui", "sans-serif"],
+        display: ["Inter", "system-ui", "sans-serif"],
+      },
+      borderRadius: {
+        "2xl": "1rem",
+        "3xl": "1.5rem",
+        "4xl": "2rem",
+      },
+      boxShadow: {
+        soft: "0 4px 20px -4px rgba(0, 0, 0, 0.08)",
+        medium: "0 8px 30px -8px rgba(0, 0, 0, 0.12)",
       },
     },
   },
