@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Testimonial {
+  id         Int      @id @default(autoincrement())
+  name       String   @db.VarChar(100)
+  content    String   @db.Text
+  rating     Int      @default(5)
+  isApproved Boolean  @default(false) @map("is_approved")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("testimonials")
+}
+
+model ContactRequest {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(100)
+  phone       String   @db.VarChar(20)
+  email       String?  @db.VarChar(100)
+  message     String?  @db.Text
+  quizAnswers Json?    @map("quiz_answers") @db.JsonB
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("contact_requests")
+}
+
+model VideoStory {
+  id              Int      @id @default(autoincrement())
+  title           String   @db.VarChar(200)
+  previewImageUrl String   @map("preview_image_url") @db.Text
+  videoUrl        String   @map("video_url") @db.Text
+  isActive        Boolean  @default(true) @map("is_active")
+  sortOrder       Int      @default(0) @map("sort_order")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@map("video_stories")
+}
