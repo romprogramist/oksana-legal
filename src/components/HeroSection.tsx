@@ -5,22 +5,26 @@ import AnimatedSection from "./AnimatedSection";
 
 export default function HeroSection() {
   return (
-    <section id="hero" className="relative min-h-[90vh] flex items-end overflow-hidden">
-      <div className="absolute inset-0">
+    <section
+      id="hero"
+      className="relative overflow-hidden bg-[#1a1a1a] lg:min-h-[90vh] lg:flex lg:items-end"
+    >
+      <div className="relative h-[55vh] min-h-[320px] w-full lg:absolute lg:top-0 lg:right-0 lg:bottom-0 lg:h-auto lg:min-h-0 lg:w-[55%]">
         <Image
           src="/images/hero.jpg"
           alt="Юридическая помощь в банкротстве"
           fill
           priority
-          className="object-cover"
-          sizes="100vw"
+          className="object-cover object-[center_25%]"
+          sizes="(max-width: 1024px) 100vw, 55vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#1a1a1a]/10 to-[#1a1a1a] lg:hidden" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1a1a1a] via-[#1a1a1a]/60 to-transparent hidden lg:block" />
       </div>
 
-      <div className="relative z-10 container-narrow pb-8 pt-32">
+      <div className="relative z-10 container-narrow py-10 lg:w-full lg:pt-32 lg:pb-8">
         <AnimatedSection animation="fade-up">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white max-w-3xl leading-tight">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-white max-w-3xl leading-tight">
             Помощь в списании долгов
             <br />
             <span className="text-white/90">и банкротстве</span>
@@ -52,7 +56,7 @@ export default function HeroSection() {
                 key={i}
                 className="px-5 py-3 bg-primary/90 backdrop-blur-sm rounded-2xl text-white"
               >
-                <span className="text-lg font-bold">{stat.value}</span>
+                <span className="text-lg font-semibold">{stat.value}</span>
                 <span className="ml-2 text-sm text-white/80">{stat.label}</span>
               </div>
             ))}

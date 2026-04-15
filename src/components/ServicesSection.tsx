@@ -9,7 +9,7 @@ export default function ServicesSection() {
       <div className="container-narrow">
         <AnimatedSection animation="fade-up">
           <div className="mb-12">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-text-primary uppercase">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-text-primary uppercase">
               Наши услуги
             </h2>
             <p className="text-2xl md:text-3xl text-text-secondary mt-1">
@@ -41,14 +41,14 @@ export default function ServicesSection() {
               >
                 <div className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-gray-200 shadow-medium">
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center">
-                    <span className="text-6xl font-bold text-primary/20">
+                    <span className="text-6xl font-semibold text-primary/20">
                       {i + 1}
                     </span>
                   </div>
                 </div>
 
                 <div>
-                  <h3 className="text-2xl md:text-3xl font-bold text-text-primary">
+                  <h3 className="text-2xl md:text-3xl font-semibold text-text-primary">
                     «{service.title}»
                   </h3>
                   <p className="mt-4 text-text-secondary leading-relaxed">

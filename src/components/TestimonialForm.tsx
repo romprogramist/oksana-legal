@@ -46,7 +46,7 @@ export default function TestimonialForm({ onClose, onSuccess }: TestimonialFormP
         <button onClick={onClose} className="absolute top-4 right-4 text-text-secondary hover:text-text-primary">
           <X className="w-5 h-5" />
         </button>
-        <h3 className="text-xl font-bold text-text-primary">Оставить отзыв</h3>
+        <h3 className="text-xl font-semibold text-text-primary">Оставить отзыв</h3>
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <input type="text" placeholder="Ваше имя *" value={name} onChange={(e) => setName(e.target.value)} maxLength={100} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:outline-none text-sm" />
           <textarea placeholder="Напишите ваш отзыв... *" value={content} onChange={(e) => setContent(e.target.value)} maxLength={1000} rows={4} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:outline-none text-sm resize-none" />

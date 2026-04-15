@@ -59,7 +59,7 @@ export default function QuizSection() {
             <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto">
               <Check className="w-8 h-8 text-white" />
             </div>
-            <h3 className="mt-6 text-2xl font-bold text-white">Спасибо!</h3>
+            <h3 className="mt-6 text-2xl font-semibold text-white">Спасибо!</h3>
             <p className="mt-2 text-white/80">
               Мы перезвоним вам в течение 15 минут для бесплатной консультации.
             </p>
@@ -74,7 +74,7 @@ export default function QuizSection() {
       <div className="container-narrow">
         <AnimatedSection animation="fade-up">
           <div className="bg-primary rounded-3xl p-6 md:p-10 lg:p-12">
-            <h2 className="text-2xl md:text-3xl font-bold text-white">
+            <h2 className="text-2xl md:text-3xl font-semibold text-white">
               Ответьте на {QUIZ_QUESTIONS.length} вопросов, и мы оценим вашу
               ситуацию бесплатно
             </h2>

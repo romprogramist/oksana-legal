@@ -32,10 +32,10 @@ function FAQItem({ item, index, isOpen, onToggle }: {
         <div
           className={cn(
             "overflow-hidden transition-all duration-300",
-            isOpen ? "max-h-96 pb-5" : "max-h-0"
+            isOpen ? "max-h-[600px] pb-5" : "max-h-0"
           )}
         >
-          <p className="px-5 text-text-secondary leading-relaxed">
+          <p className="px-5 text-text-secondary leading-relaxed whitespace-pre-line">
             {item.answer}
           </p>
         </div>
@@ -59,7 +59,7 @@ export default function FAQSection() {
             <p className="text-sm font-medium text-primary uppercase tracking-wider">
               Вопросы и ответы
             </p>
-            <h2 className="mt-2 text-3xl md:text-4xl font-bold text-text-primary">
+            <h2 className="mt-2 text-3xl md:text-4xl font-semibold text-text-primary">
               Частые вопросы о банкротстве
             </h2>
             <p className="mt-3 text-text-secondary max-w-2xl mx-auto">

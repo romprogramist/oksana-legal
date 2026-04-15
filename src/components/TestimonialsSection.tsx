@@ -45,7 +45,7 @@ export default function TestimonialsSection() {
         <AnimatedSection animation="fade-up">
           <div className="text-center mb-12">
             <p className="text-sm font-medium text-primary uppercase tracking-wider">Отзывы клиентов</p>
-            <h2 className="mt-2 text-3xl md:text-4xl font-bold text-text-primary">Истории успеха наших клиентов</h2>
+            <h2 className="mt-2 text-3xl md:text-4xl font-semibold text-text-primary">Истории успеха наших клиентов</h2>
             <p className="mt-3 text-text-secondary">Более 500 клиентов уже освободились от долгов с нашей помощью</p>
           </div>
         </AnimatedSection>

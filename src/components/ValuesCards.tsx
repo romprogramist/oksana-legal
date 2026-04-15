@@ -21,7 +21,7 @@ export default function ValuesCards() {
                 <div>
                   <h3
                     className={cn(
-                      "text-xl font-bold",
+                      "text-xl font-semibold",
                       value.variant === "accent" ? "text-white" : "text-text-primary"
                     )}
                   >

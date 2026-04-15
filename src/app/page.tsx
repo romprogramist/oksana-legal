@@ -4,11 +4,14 @@ import WhyUsSection from "@/components/WhyUsSection";
 import ValuesCards from "@/components/ValuesCards";
 import QuizSection from "@/components/QuizSection";
 import ServicesSection from "@/components/ServicesSection";
+import PricingSection from "@/components/PricingSection";
+import HowWeWorkSection from "@/components/HowWeWorkSection";
 import FAQSection from "@/components/FAQSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
+import UsefulSection from "@/components/UsefulSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
-import FloatingWhatsApp from "@/components/FloatingWhatsApp";
+import FloatingMax from "@/components/FloatingMax";
 import { FAQ_ITEMS, LEGAL, CONTACT } from "@/lib/constants";
 
 export default function Home() {
@@ -44,12 +47,15 @@ export default function Home() {
         <ValuesCards />
         <QuizSection />
         <ServicesSection />
+        <PricingSection />
+        <HowWeWorkSection />
         <FAQSection />
         <TestimonialsSection />
+        <UsefulSection />
         <ContactSection />
       </main>
       <Footer />
-      <FloatingWhatsApp />
+      <FloatingMax />
     </>
   );
 }

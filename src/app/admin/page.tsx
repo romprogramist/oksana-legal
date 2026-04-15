@@ -32,7 +32,7 @@ export default function AdminPage() {
     <div className="min-h-screen bg-background">
       <div className="container-narrow py-8">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-bold text-text-primary">Админ-панель</h1>
+          <h1 className="text-2xl font-semibold text-text-primary">Админ-панель</h1>
           <a href="/" className="text-sm text-primary hover:underline">На сайт</a>
         </div>
         <div className="flex gap-4 mb-6">
