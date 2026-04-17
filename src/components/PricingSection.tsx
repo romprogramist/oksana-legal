@@ -34,7 +34,7 @@ export default function PricingSection() {
             >
               <div className="h-full bg-white rounded-3xl shadow-soft p-6 flex flex-col hover:shadow-medium transition-shadow">
                 <div className="flex items-start gap-2 mb-3">
-                  <Check className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                  <Check className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
                   <h3 className="text-lg font-semibold text-text-primary">
                     {item.title}
                   </h3>

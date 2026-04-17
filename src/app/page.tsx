@@ -11,7 +11,8 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import UsefulSection from "@/components/UsefulSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
-import FloatingMax from "@/components/FloatingMax";
+import CasesSection from "@/components/CasesSection";
+import FloatingButtons from "@/components/FloatingButtons";
 import { FAQ_ITEMS, LEGAL, CONTACT } from "@/lib/constants";
 
 export default function Home() {
@@ -50,12 +51,13 @@ export default function Home() {
         <PricingSection />
         <HowWeWorkSection />
         <FAQSection />
+        <CasesSection />
         <TestimonialsSection />
         <UsefulSection />
         <ContactSection />
       </main>
       <Footer />
-      <FloatingMax />
+      <FloatingButtons />
     </>
   );
 }

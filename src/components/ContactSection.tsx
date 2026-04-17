@@ -81,7 +81,7 @@ export default function ContactSection() {
                     <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-1 rounded border-gray-300 text-primary focus:ring-primary" />
                     <span className="text-xs text-text-secondary">Нажимая кнопку, вы соглашаетесь с <a href="/privacy" className="text-primary underline">политикой конфиденциальности</a></span>
                   </label>
-                  <button type="submit" disabled={isSubmitting || !agreed} className="w-full py-3.5 bg-primary text-white rounded-xl font-medium hover:bg-primary-light transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+                  <button type="submit" disabled={isSubmitting || !agreed} className="w-full py-3.5 bg-accent text-white rounded-xl font-medium hover:bg-accent-dark transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
                     <Send className="w-4 h-4" />{isSubmitting ? "Отправка..." : "Отправить заявку"}
                   </button>
                 </form>

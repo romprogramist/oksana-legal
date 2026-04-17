@@ -59,7 +59,7 @@ export default function FAQSection() {
             <p className="text-sm font-medium text-primary uppercase tracking-wider">
               Вопросы и ответы
             </p>
-            <h2 className="mt-2 text-3xl md:text-4xl font-semibold text-text-primary">
+            <h2 className="mt-2 text-3xl md:text-4xl font-semibold text-primary">
               Частые вопросы о банкротстве
             </h2>
             <p className="mt-3 text-text-secondary max-w-2xl mx-auto">

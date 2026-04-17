@@ -91,7 +91,7 @@ export default function TestimonialsSection() {
         )}
 
         <div className="mt-8 text-center">
-          <button onClick={() => setShowForm(true)} className="px-6 py-3 border-2 border-primary text-primary rounded-full font-medium hover:bg-primary hover:text-white transition-colors">Оставить отзыв</button>
+          <button onClick={() => setShowForm(true)} className="px-6 py-3 bg-accent text-white rounded-full font-medium hover:bg-accent-dark transition-colors">Оставить отзыв</button>
         </div>
 
         {showForm && <TestimonialForm onClose={() => setShowForm(false)} onSuccess={handleFormSuccess} />}
