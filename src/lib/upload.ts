@@ -16,7 +16,7 @@ const DOCUMENT_MIMES = new Set([
 ]);
 const IMAGE_MAX_BYTES = 5 * 1024 * 1024;
 const DOCUMENT_MAX_BYTES = 20 * 1024 * 1024;
-const UPLOADS_DIR = path.resolve("uploads");
+const UPLOADS_DIR = path.resolve("public/uploads");
 
 export type UploadResult =
   | { ok: true; url: string; size: number }

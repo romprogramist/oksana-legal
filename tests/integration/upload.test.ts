@@ -5,7 +5,7 @@ import { POST as uploadRoute } from "@/app/api/admin/upload/route";
 import { newSessionToken, SESSION_COOKIE } from "@/lib/auth";
 import { NextRequest } from "next/server";
 
-const UPLOADS = path.resolve("uploads");
+const UPLOADS = path.resolve("public/uploads");
 
 function makeUploadRequest(folder: string, file: { name: string; type: string; data: Buffer }, withAuth = true): NextRequest {
   const boundary = "----testboundary";
@@ -53,7 +53,7 @@ describe("POST /api/admin/upload", () => {
     const body = await res.json();
     expect(body.url).toMatch(/^\/uploads\/services\/[a-f0-9-]+\.webp$/);
     expect(body.size).toBeGreaterThan(0);
-    const filePath = path.join(process.cwd(), body.url);
+    const filePath = path.join(process.cwd(), "public", body.url);
     expect(fs.existsSync(filePath)).toBe(true);
   });
 
