@@ -1,18 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifySession, SESSION_COOKIE } from "@/lib/auth";
+import { verifySessionEdge } from "@/lib/auth-edge";
+
+const SESSION_COOKIE = "admin_session";
 
 const PUBLIC_ADMIN_PATHS = new Set([
   "/admin/login",
   "/api/admin/login",
 ]);
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   if (PUBLIC_ADMIN_PATHS.has(pathname)) return NextResponse.next();
 
   const token = req.cookies.get(SESSION_COOKIE)?.value ?? "";
-  const session = verifySession(token);
+  const session = await verifySessionEdge(token);
 
   if (session) return NextResponse.next();
 
