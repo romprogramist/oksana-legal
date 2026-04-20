@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { revalidateHome } from "@/lib/revalidate";
-import { testimonialCreateSchema, testimonialUpdateSchema } from "./_schema";
-
-export { testimonialCreateSchema as createSchema, testimonialUpdateSchema as updateSchema };
+import { testimonialCreateSchema } from "./_schema";
 
 export async function GET() {
   const items = await prisma.testimonial.findMany({
