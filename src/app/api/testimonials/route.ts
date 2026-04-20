@@ -8,8 +8,10 @@ export async function GET(request: Request) {
     const all = searchParams.get("all");
 
     const testimonials = await prisma.testimonial.findMany({
-      where: all === "true" ? {} : { isApproved: true },
-      orderBy: { createdAt: "desc" },
+      where: all === "true" ? {} : { isApproved: true, isActive: true },
+      orderBy: all === "true"
+        ? { createdAt: "desc" }
+        : [{ sortOrder: "asc" }, { createdAt: "desc" }],
     });
 
     return NextResponse.json(testimonials);

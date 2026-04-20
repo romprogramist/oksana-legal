@@ -126,3 +126,36 @@ for (const s of SECTIONS) {
     });
   });
 }
+
+import * as tList from "@/app/api/admin/testimonials/route";
+import * as tOne from "@/app/api/admin/testimonials/[id]/route";
+import * as tReorder from "@/app/api/admin/testimonials/reorder/route";
+
+describe("testimonials CRUD (admin)", () => {
+  beforeEach(async () => { await prisma.testimonial.deleteMany({}); });
+
+  it("admin-created testimonial defaults to isApproved=true", async () => {
+    const req = makeRequest("/api/admin/testimonials", {
+      method: "POST",
+      body: { name: "Иван", content: "Отличные услуги", rating: 5 },
+    });
+    const res = await tList.POST(req);
+    expect(res.status).toBe(201);
+    const body = await readJson(res);
+    expect(body.isApproved).toBe(true);
+  });
+
+  it("reorder works", async () => {
+    const ids: number[] = [];
+    for (let i = 0; i < 3; i++) {
+      const r = await tList.POST(makeRequest("/api/admin/testimonials", {
+        method: "POST", body: { name: `T${i}`, content: "x".repeat(10), rating: 5 },
+      }));
+      ids.push((await readJson(r)).id);
+    }
+    const reordered = [ids[2], ids[0], ids[1]];
+    await tReorder.POST(makeRequest("/api/admin/testimonials/reorder", { method: "POST", body: { ids: reordered } }));
+    const list = await readJson(await tList.GET());
+    expect(list.filter((x: any) => x.isApproved).map((x: any) => x.id)).toEqual(reordered);
+  });
+});
