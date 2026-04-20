@@ -11,7 +11,7 @@ export function makeRequest(
     headers["content-type"] ??= "application/json";
   }
   init.headers = headers;
-  const req = new NextRequest(new URL(url, "http://localhost").toString(), init);
+  const req = new NextRequest(new URL(url, "http://localhost").toString(), init as any);
   for (const [k, v] of Object.entries(cookies)) req.cookies.set(k, v);
   return req;
 }
