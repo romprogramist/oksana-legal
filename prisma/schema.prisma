@@ -11,6 +11,9 @@ model Testimonial {
   name       String   @db.VarChar(100)
   content    String   @db.Text
   rating     Int      @default(5)
+  photoUrl   String?  @map("photo_url") @db.Text
+  sortOrder  Int      @default(0) @map("sort_order")
+  isActive   Boolean  @default(true) @map("is_active")
   isApproved Boolean  @default(false) @map("is_approved")
   createdAt  DateTime @default(now()) @map("created_at")
 
@@ -39,4 +42,57 @@ model VideoStory {
   createdAt       DateTime @default(now()) @map("created_at")
 
   @@map("video_stories")
+}
+
+model Service {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(200)
+  description String?  @db.Text
+  imageUrl    String   @default("") @map("image_url") @db.Text
+  tags        String[] @default([]) @db.VarChar(100)
+  sortOrder   Int      @default(0) @map("sort_order")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt  @map("updated_at")
+
+  @@map("services")
+}
+
+model PriceItem {
+  id        Int      @id @default(autoincrement())
+  title     String   @db.VarChar(200)
+  note      String?  @db.Text
+  price     String   @db.VarChar(100)
+  sortOrder Int      @default(0) @map("sort_order")
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt  @map("updated_at")
+
+  @@map("price_items")
+}
+
+model FaqItem {
+  id        Int      @id @default(autoincrement())
+  question  String   @db.Text
+  answer    String   @db.Text
+  sortOrder Int      @default(0) @map("sort_order")
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt  @map("updated_at")
+
+  @@map("faq_items")
+}
+
+model DocumentSample {
+  id          Int      @id @default(autoincrement())
+  title       String   @db.VarChar(200)
+  description String?  @db.Text
+  fileUrl     String   @map("file_url") @db.Text
+  fileSize    Int?     @map("file_size")
+  sortOrder   Int      @default(0) @map("sort_order")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt  @map("updated_at")
+
+  @@map("document_samples")
 }
