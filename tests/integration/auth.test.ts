@@ -61,3 +61,71 @@ describe("rate limit", () => {
     expect(checkRateLimit("5.6.7.8").ok).toBe(true);
   });
 });
+
+import { POST as loginRoute } from "@/app/api/admin/login/route";
+import { POST as logoutRoute } from "@/app/api/admin/logout/route";
+import { makeRequest, readJson } from "../helpers/request";
+
+describe("POST /api/admin/login", () => {
+  beforeEach(() => resetRateLimit());
+
+  it("returns 200 and sets session cookie on valid credentials", async () => {
+    const req = makeRequest("/api/admin/login", {
+      method: "POST",
+      body: { login: "test_admin", password: "test_password_12345" },
+      headers: { "x-forwarded-for": "127.0.0.1" },
+    });
+    const res = await loginRoute(req);
+    expect(res.status).toBe(200);
+    const setCookie = res.headers.get("set-cookie") ?? "";
+    expect(setCookie).toMatch(/admin_session=/);
+    expect(setCookie).toMatch(/HttpOnly/i);
+  });
+
+  it("returns 401 on invalid credentials", async () => {
+    const req = makeRequest("/api/admin/login", {
+      method: "POST",
+      body: { login: "test_admin", password: "wrong" },
+      headers: { "x-forwarded-for": "127.0.0.2" },
+    });
+    const res = await loginRoute(req);
+    expect(res.status).toBe(401);
+  });
+
+  it("returns 429 after 5 failed attempts from same IP", async () => {
+    for (let i = 0; i < 5; i++) {
+      await loginRoute(makeRequest("/api/admin/login", {
+        method: "POST",
+        body: { login: "x", password: "y" },
+        headers: { "x-forwarded-for": "127.0.0.3" },
+      }));
+    }
+    const res = await loginRoute(makeRequest("/api/admin/login", {
+      method: "POST",
+      body: { login: "test_admin", password: "test_password_12345" },
+      headers: { "x-forwarded-for": "127.0.0.3" },
+    }));
+    expect(res.status).toBe(429);
+  });
+
+  it("returns 400 on malformed body", async () => {
+    const req = makeRequest("/api/admin/login", {
+      method: "POST",
+      body: { foo: "bar" },
+      headers: { "x-forwarded-for": "127.0.0.4" },
+    });
+    const res = await loginRoute(req);
+    expect(res.status).toBe(400);
+  });
+});
+
+describe("POST /api/admin/logout", () => {
+  it("clears the session cookie", async () => {
+    const req = makeRequest("/api/admin/logout", { method: "POST" });
+    const res = await logoutRoute(req);
+    expect(res.status).toBe(200);
+    const setCookie = res.headers.get("set-cookie") ?? "";
+    expect(setCookie).toMatch(/admin_session=;/);
+    expect(setCookie).toMatch(/Max-Age=0/i);
+  });
+});
