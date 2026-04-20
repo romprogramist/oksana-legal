@@ -13,9 +13,18 @@ import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import CasesSection from "@/components/CasesSection";
 import FloatingButtons from "@/components/FloatingButtons";
-import { FAQ_ITEMS, LEGAL, CONTACT } from "@/lib/constants";
+import { prisma } from "@/lib/prisma";
+import { LEGAL, CONTACT } from "@/lib/constants";
 
-export default function Home() {
+export const revalidate = 60;
+
+export default async function Home() {
+  const faqItems = await prisma.faqItem.findMany({
+    where: { isActive: true },
+    orderBy: { sortOrder: "asc" },
+    select: { question: true, answer: true },
+  });
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LegalService",
@@ -30,7 +39,7 @@ export default function Home() {
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: FAQ_ITEMS.map((item) => ({
+    mainEntity: faqItems.map((item) => ({
       "@type": "Question",
       name: item.question,
       acceptedAnswer: { "@type": "Answer", text: item.answer },
