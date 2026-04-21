@@ -34,8 +34,9 @@ jobs:
           git fetch origin master
           git reset --hard origin/master
           npm ci
+          npx prisma generate
           npx prisma migrate deploy
-          npx prisma db seed
+          npx prisma db seed || true
           npm run build
           pm2 restart oksana-legal --update-env
           pm2 save
