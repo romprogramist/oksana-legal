@@ -1,14 +1,12 @@
 module.exports = {
   apps: [
     {
-      name: "oksana-legal",
-      script: "server.js",
-      cwd: "/var/www/spisanie/nextjs",
+      name: 'oksana-legal',
+      script: './node_modules/next/dist/bin/next',
+      args: 'start -p 3003',
+      cwd: '/var/www/spisanie/nextjs',
       env: {
-        NODE_ENV: "production",
-        PORT: 3003,
-        DATABASE_URL:
-          "postgresql://postgres@localhost:5432/oksana_legal_db",
+        NODE_ENV: 'production',
       },
     },
   ],
