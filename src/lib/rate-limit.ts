@@ -26,3 +26,24 @@ export function resetRateLimit(ip?: string) {
   if (ip) store.delete(ip);
   else store.clear();
 }
+
+const REVIEW_WINDOW_MS = 60 * 60 * 1000;
+const REVIEW_MAX_PER_WINDOW = 3;
+const reviewStore = new Map<string, number[]>();
+
+export function checkReviewRateLimit(ip: string): RateLimitResult {
+  const now = Date.now();
+  const timestamps = (reviewStore.get(ip) ?? []).filter((t) => now - t < REVIEW_WINDOW_MS);
+  if (timestamps.length >= REVIEW_MAX_PER_WINDOW) {
+    const oldest = timestamps[0];
+    return { ok: false, retryAfterMs: REVIEW_WINDOW_MS - (now - oldest) };
+  }
+  timestamps.push(now);
+  reviewStore.set(ip, timestamps);
+  return { ok: true };
+}
+
+export function resetReviewRateLimit(ip?: string) {
+  if (ip) reviewStore.delete(ip);
+  else reviewStore.clear();
+}

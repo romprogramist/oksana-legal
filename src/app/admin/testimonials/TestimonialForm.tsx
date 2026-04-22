@@ -6,6 +6,8 @@ import { Star } from "lucide-react";
 import { AdminField, inputClass } from "@/components/admin/AdminField";
 import { FileUploader } from "@/components/admin/FileUploader";
 
+type TestimonialStatus = "pending" | "approved" | "rejected";
+
 type TestimonialData = {
   id?: number;
   name: string;
@@ -13,13 +15,13 @@ type TestimonialData = {
   rating: number;
   photoUrl: string | null;
   isActive: boolean;
-  isApproved: boolean;
+  status: TestimonialStatus;
 };
 
 export function TestimonialForm({ initial }: { initial?: TestimonialData }) {
   const router = useRouter();
   const [data, setData] = useState<TestimonialData>(initial ?? {
-    name: "", content: "", rating: 5, photoUrl: null, isActive: true, isApproved: true,
+    name: "", content: "", rating: 5, photoUrl: null, isActive: true, status: "approved",
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -58,16 +60,21 @@ export function TestimonialForm({ initial }: { initial?: TestimonialData }) {
         {data.photoUrl && <button type="button" onClick={() => setData({ ...data, photoUrl: null })} className="mt-2 text-sm text-red-600 hover:underline">Убрать фото</button>}
       </AdminField>
       <AdminField label="Статус">
-        <div className="space-y-2">
-          <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={data.isApproved} onChange={(e) => setData({ ...data, isApproved: e.target.checked })} />
-            Одобрен (виден на сайте)
-          </label>
-          <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={data.isActive} onChange={(e) => setData({ ...data, isActive: e.target.checked })} />
-            Активен (не скрыт)
-          </label>
-        </div>
+        <select
+          value={data.status}
+          onChange={(e) => setData({ ...data, status: e.target.value as TestimonialStatus })}
+          className={inputClass}
+        >
+          <option value="pending">На модерации</option>
+          <option value="approved">Одобрен (виден на сайте)</option>
+          <option value="rejected">Отклонён</option>
+        </select>
+      </AdminField>
+      <AdminField label="Видимость">
+        <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" checked={data.isActive} onChange={(e) => setData({ ...data, isActive: e.target.checked })} />
+          Активен (не скрыт)
+        </label>
       </AdminField>
       {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
       <div className="flex gap-2">

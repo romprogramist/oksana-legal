@@ -1,11 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { revalidateHome } from "@/lib/revalidate";
-import { testimonialCreateSchema } from "./_schema";
+import { testimonialCreateSchema, testimonialStatusSchema } from "./_schema";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const statusParam = req.nextUrl.searchParams.get("status");
+  let where = {};
+  if (statusParam) {
+    const parsed = testimonialStatusSchema.safeParse(statusParam);
+    if (!parsed.success) return NextResponse.json({ error: "Invalid status" }, { status: 400 });
+    where = { status: parsed.data };
+  }
   const items = await prisma.testimonial.findMany({
-    orderBy: [{ isApproved: "asc" }, { sortOrder: "asc" }, { createdAt: "desc" }],
+    where,
+    orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
   });
   return NextResponse.json(items);
 }

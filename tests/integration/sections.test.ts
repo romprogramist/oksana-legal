@@ -134,7 +134,7 @@ import * as tReorder from "@/app/api/admin/testimonials/reorder/route";
 describe("testimonials CRUD (admin)", () => {
   beforeEach(async () => { await prisma.testimonial.deleteMany({}); });
 
-  it("admin-created testimonial defaults to isApproved=true", async () => {
+  it("admin-created testimonial defaults to status=approved", async () => {
     const req = makeRequest("/api/admin/testimonials", {
       method: "POST",
       body: { name: "Иван", content: "Отличные услуги", rating: 5 },
@@ -142,7 +142,7 @@ describe("testimonials CRUD (admin)", () => {
     const res = await tList.POST(req);
     expect(res.status).toBe(201);
     const body = await readJson(res);
-    expect(body.isApproved).toBe(true);
+    expect(body.status).toBe("approved");
   });
 
   it("reorder works", async () => {
@@ -155,7 +155,7 @@ describe("testimonials CRUD (admin)", () => {
     }
     const reordered = [ids[2], ids[0], ids[1]];
     await tReorder.POST(makeRequest("/api/admin/testimonials/reorder", { method: "POST", body: { ids: reordered } }));
-    const list = await readJson(await tList.GET());
-    expect(list.filter((x: any) => x.isApproved).map((x: any) => x.id)).toEqual(reordered);
+    const list = await readJson(await tList.GET(makeRequest("/api/admin/testimonials", { method: "GET" })));
+    expect(list.filter((x: any) => x.status === "approved").map((x: any) => x.id)).toEqual(reordered);
   });
 });

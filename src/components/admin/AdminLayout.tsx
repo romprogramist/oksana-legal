@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { LogoutButton } from "./LogoutButton";
 import { cn } from "@/lib/utils";
 
@@ -11,13 +11,22 @@ const NAV = [
   { href: "/admin/services", label: "Услуги" },
   { href: "/admin/prices", label: "Цены" },
   { href: "/admin/faq", label: "FAQ" },
-  { href: "/admin/testimonials", label: "Отзывы" },
+  { href: "/admin/testimonials", label: "Отзывы", badgeKey: "testimonials" as const },
   { href: "/admin/documents", label: "Документы" },
   { href: "/admin/contacts", label: "Заявки" },
 ];
 
 export function AdminLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const [pendingReviews, setPendingReviews] = useState(0);
+
+  useEffect(() => {
+    if (pathname === "/admin/login") return;
+    fetch("/api/admin/testimonials/count")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (d && typeof d.pending === "number") setPendingReviews(d.pending); })
+      .catch(() => { /* ignore */ });
+  }, [pathname]);
 
   if (pathname === "/admin/login") return <>{children}</>;
 
@@ -28,16 +37,23 @@ export function AdminLayout({ children }: { children: ReactNode }) {
         <nav className="flex md:flex-col gap-1 flex-1">
           {NAV.map((item) => {
             const active = pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href));
+            const showBadge = item.badgeKey === "testimonials" && pendingReviews > 0;
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "px-3 py-2 rounded-full text-sm whitespace-nowrap transition-colors",
+                  "px-3 py-2 rounded-full text-sm whitespace-nowrap transition-colors flex items-center justify-between gap-2",
                   active ? "bg-primary text-white" : "text-text-secondary hover:bg-gray-100"
                 )}
               >
-                {item.label}
+                <span>{item.label}</span>
+                {showBadge && (
+                  <span className={cn(
+                    "inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded-full text-[11px] font-semibold",
+                    active ? "bg-white text-primary" : "bg-yellow-100 text-yellow-800",
+                  )}>{pendingReviews}</span>
+                )}
               </Link>
             );
           })}

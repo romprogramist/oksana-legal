@@ -4,13 +4,24 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Star } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { SortableList } from "@/components/admin/SortableList";
 import { ConfirmDialog } from "@/components/admin/ConfirmDialog";
 
-type T = { id: number; name: string; content: string; rating: number; photoUrl: string | null; isActive: boolean; isApproved: boolean; createdAt: string };
+type TestimonialStatus = "pending" | "approved" | "rejected";
+type T = { id: number; name: string; content: string; rating: number; photoUrl: string | null; isActive: boolean; status: TestimonialStatus; createdAt: string };
+
+type Tab = "pending" | "approved" | "rejected";
+
+const TAB_LABELS: Record<Tab, string> = {
+  pending: "На модерации",
+  approved: "Опубликованные",
+  rejected: "Отклонённые",
+};
 
 export default function TestimonialsListPage() {
   const [items, setItems] = useState<T[]>([]);
+  const [tab, setTab] = useState<Tab>("pending");
   const [toDelete, setToDelete] = useState<number | null>(null);
 
   async function load() {
@@ -19,29 +30,43 @@ export default function TestimonialsListPage() {
   }
   useEffect(() => { load(); }, []);
 
-  async function reorder(ids: number[]) {
-    const approved = items.filter((x) => x.isApproved);
-    const pending = items.filter((x) => !x.isApproved);
-    const approvedIds = ids.filter((id) => approved.some((x) => x.id === id));
-    const prev = items;
-    setItems([...pending, ...approvedIds.map((id) => approved.find((x) => x.id === id)!)]);
-    const res = await fetch("/api/admin/testimonials/reorder", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ ids: approvedIds }) });
-    if (!res.ok) { setItems(prev); alert("Не удалось сохранить порядок"); }
-    else load();
+  const pending = items.filter((x) => x.status === "pending");
+  const approved = items.filter((x) => x.status === "approved");
+  const rejected = items.filter((x) => x.status === "rejected");
+
+  useEffect(() => {
+    if (tab === "pending" && pending.length === 0 && (approved.length > 0 || rejected.length > 0)) {
+      setTab("approved");
+    }
+  }, [pending.length, approved.length, rejected.length, tab]);
+
+  async function setStatus(id: number, status: TestimonialStatus) {
+    await fetch(`/api/admin/testimonials/${id}`, {
+      method: "PATCH",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ status }),
+    });
+    load();
   }
 
-  async function approve(id: number) {
-    await fetch(`/api/admin/testimonials/${id}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: JSON.stringify({ isApproved: true }) });
-    load();
+  async function reorder(ids: number[]) {
+    const prev = items;
+    const reordered = ids.map((id) => approved.find((x) => x.id === id)!);
+    const other = items.filter((x) => x.status !== "approved");
+    setItems([...other, ...reordered]);
+    const res = await fetch("/api/admin/testimonials/reorder", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ ids }),
+    });
+    if (!res.ok) { setItems(prev); alert("Не удалось сохранить порядок"); }
+    else load();
   }
 
   async function doDelete(id: number) {
     await fetch(`/api/admin/testimonials/${id}`, { method: "DELETE" });
     setToDelete(null); load();
   }
-
-  const pending = items.filter((x) => !x.isApproved);
-  const approved = items.filter((x) => x.isApproved);
 
   const card = (item: T) => (
     <div className="flex items-start gap-3">
@@ -54,20 +79,34 @@ export default function TestimonialsListPage() {
       )}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <p className={item.isActive && item.isApproved ? "font-medium text-text-primary" : "font-medium text-gray-400 line-through"}>{item.name}</p>
+          <p className={item.isActive && item.status === "approved" ? "font-medium text-text-primary" : "font-medium text-gray-400 line-through"}>{item.name}</p>
           <div className="flex">
             {[1,2,3,4,5].map((s) => <Star key={s} className={`w-3 h-3 ${s <= item.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-200"}`} />)}
           </div>
         </div>
         <p className="text-xs text-text-secondary mt-1 line-clamp-2">{item.content}</p>
+        <p className="text-[11px] text-gray-400 mt-1">{new Date(item.createdAt).toLocaleString("ru-RU")}</p>
       </div>
-      <div className="flex items-center gap-2 shrink-0">
-        {!item.isApproved && <button onClick={() => approve(item.id)} className="text-sm text-green-700 hover:underline">Одобрить</button>}
+      <div className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1 shrink-0">
+        {item.status === "pending" && (
+          <>
+            <button onClick={() => setStatus(item.id, "approved")} className="text-sm text-green-700 hover:underline">Одобрить</button>
+            <button onClick={() => setStatus(item.id, "rejected")} className="text-sm text-gray-600 hover:underline">Отклонить</button>
+          </>
+        )}
+        {item.status === "approved" && (
+          <button onClick={() => setStatus(item.id, "rejected")} className="text-sm text-gray-600 hover:underline">Отклонить</button>
+        )}
+        {item.status === "rejected" && (
+          <button onClick={() => setStatus(item.id, "pending")} className="text-sm text-yellow-700 hover:underline">Восстановить</button>
+        )}
         <Link href={`/admin/testimonials/${item.id}`} className="text-sm text-primary hover:underline">Правка</Link>
         <button onClick={() => setToDelete(item.id)} className="text-sm text-red-600 hover:underline">Удалить</button>
       </div>
     </div>
   );
+
+  const currentList = tab === "pending" ? pending : tab === "approved" ? approved : rejected;
 
   return (
     <div>
@@ -76,20 +115,47 @@ export default function TestimonialsListPage() {
         <Link href="/admin/testimonials/new" className="px-4 py-2 bg-primary text-white rounded-full text-sm hover:bg-primary/90">+ Добавить вручную</Link>
       </div>
 
-      {pending.length > 0 && (
-        <>
-          <h2 className="mt-4 mb-2 text-sm font-medium text-yellow-700">На модерации ({pending.length})</h2>
-          <div className="space-y-2 mb-6">
-            {pending.map((item) => (
-              <div key={item.id} className="bg-white rounded-2xl shadow-soft p-4 border-l-4 border-yellow-400">{card(item)}</div>
-            ))}
-          </div>
-        </>
-      )}
+      <div className="flex gap-2 mb-6 border-b border-gray-200">
+        {(["pending", "approved", "rejected"] as const).map((t) => {
+          const count = t === "pending" ? pending.length : t === "approved" ? approved.length : rejected.length;
+          const active = tab === t;
+          return (
+            <button
+              key={t}
+              onClick={() => setTab(t)}
+              className={cn(
+                "px-4 py-2 text-sm -mb-px border-b-2 transition-colors",
+                active ? "border-primary text-primary font-medium" : "border-transparent text-text-secondary hover:text-text-primary",
+              )}
+            >
+              {TAB_LABELS[t]}
+              <span className={cn(
+                "ml-2 inline-flex items-center justify-center min-w-[1.5rem] px-1.5 rounded-full text-xs",
+                t === "pending" && count > 0 ? "bg-yellow-100 text-yellow-800" : "bg-gray-100 text-gray-600",
+              )}>{count}</span>
+            </button>
+          );
+        })}
+      </div>
 
-      <h2 className="mt-4 mb-2 text-sm font-medium text-text-secondary">Опубликованные ({approved.length})</h2>
-      {approved.length === 0 ? <p className="text-text-secondary">Нет опубликованных отзывов.</p> : (
+      {currentList.length === 0 ? (
+        <p className="text-text-secondary">
+          {tab === "pending" && "Нет отзывов на модерации."}
+          {tab === "approved" && "Нет опубликованных отзывов."}
+          {tab === "rejected" && "Нет отклонённых отзывов."}
+        </p>
+      ) : tab === "approved" ? (
         <SortableList items={approved} onReorder={reorder} renderItem={card} />
+      ) : (
+        <div className="space-y-2">
+          {currentList.map((item) => (
+            <div key={item.id} className={cn(
+              "bg-white rounded-2xl shadow-soft p-4",
+              tab === "pending" && "border-l-4 border-yellow-400",
+              tab === "rejected" && "border-l-4 border-gray-300 opacity-75",
+            )}>{card(item)}</div>
+          ))}
+        </div>
       )}
 
       <ConfirmDialog open={toDelete !== null} title="Удалить отзыв?" message="Действие необратимо." onCancel={() => setToDelete(null)} onConfirm={() => toDelete && doDelete(toDelete)} />

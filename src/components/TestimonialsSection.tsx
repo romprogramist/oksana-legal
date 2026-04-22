@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Star, Quote } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star, Quote, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import AnimatedSection from "./AnimatedSection";
-import TestimonialForm from "./TestimonialForm";
+import ReviewForm from "./testimonials/ReviewForm";
 
 interface Testimonial {
   id: number;
@@ -94,7 +94,19 @@ export default function TestimonialsSection() {
           <button onClick={() => setShowForm(true)} className="px-6 py-3 bg-accent text-white rounded-full font-medium hover:bg-accent-dark transition-colors">Оставить отзыв</button>
         </div>
 
-        {showForm && <TestimonialForm onClose={() => setShowForm(false)} onSuccess={handleFormSuccess} />}
+        {showForm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+            <div className="bg-white rounded-3xl p-6 md:p-8 w-full max-w-md relative">
+              <button onClick={() => setShowForm(false)} className="absolute top-4 right-4 text-text-secondary hover:text-text-primary" aria-label="Закрыть">
+                <X className="w-5 h-5" />
+              </button>
+              <h3 className="text-xl font-semibold text-text-primary">Оставить отзыв</h3>
+              <div className="mt-6">
+                <ReviewForm variant="modal" onCancel={() => setShowForm(false)} onSuccess={handleFormSuccess} />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

@@ -14,7 +14,7 @@ export default async function EditTestimonialPage({ params }: { params: { id: st
       <h1 className="text-2xl font-semibold text-text-primary mb-6">Редактирование: {item.name}</h1>
       <TestimonialForm initial={{
         id: item.id, name: item.name, content: item.content, rating: item.rating,
-        photoUrl: item.photoUrl, isActive: item.isActive, isApproved: item.isApproved,
+        photoUrl: item.photoUrl, isActive: item.isActive, status: item.status,
       }} />
     </div>
   );

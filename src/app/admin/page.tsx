@@ -11,7 +11,7 @@ async function getCounts() {
     prisma.testimonial.count(),
     prisma.documentSample.count(),
     prisma.contactRequest.count(),
-    prisma.testimonial.count({ where: { isApproved: false } }),
+    prisma.testimonial.count({ where: { status: "pending" } }),
   ]);
   return { services, prices, faq, testimonials, documents, contacts, pending };
 }
