@@ -47,3 +47,24 @@ export function resetReviewRateLimit(ip?: string) {
   if (ip) reviewStore.delete(ip);
   else reviewStore.clear();
 }
+
+const PAYMENT_WINDOW_MS = 15 * 60 * 1000;
+const PAYMENT_MAX_PER_WINDOW = 5;
+const paymentStore = new Map<string, number[]>();
+
+export function checkPaymentRateLimit(ip: string): RateLimitResult {
+  const now = Date.now();
+  const timestamps = (paymentStore.get(ip) ?? []).filter((t) => now - t < PAYMENT_WINDOW_MS);
+  if (timestamps.length >= PAYMENT_MAX_PER_WINDOW) {
+    const oldest = timestamps[0];
+    return { ok: false, retryAfterMs: PAYMENT_WINDOW_MS - (now - oldest) };
+  }
+  timestamps.push(now);
+  paymentStore.set(ip, timestamps);
+  return { ok: true };
+}
+
+export function resetPaymentRateLimit(ip?: string) {
+  if (ip) paymentStore.delete(ip);
+  else paymentStore.clear();
+}
