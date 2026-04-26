@@ -13,6 +13,7 @@ const NAV = [
   { href: "/admin/faq", label: "FAQ" },
   { href: "/admin/testimonials", label: "Отзывы", badgeKey: "testimonials" as const },
   { href: "/admin/documents", label: "Документы" },
+  { href: "/admin/payments", label: "Платежи" },
   { href: "/admin/contacts", label: "Заявки" },
 ];
 
