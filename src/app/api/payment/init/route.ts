@@ -1,8 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { createPayment, TochkaError } from "@/lib/tochka";
 import { prisma } from "@/lib/prisma";
-import { checkRateLimit } from "@/lib/rate-limit";
+import { checkPaymentRateLimit } from "@/lib/rate-limit";
 
 const schema = z.object({
   amount: z.number().int().min(1).max(10_000_000),
@@ -19,7 +20,7 @@ export async function POST(request: NextRequest) {
   const ip =
     request.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
     "unknown";
-  const rl = checkRateLimit(ip);
+  const rl = checkPaymentRateLimit(ip);
   if (!rl.ok) {
     return NextResponse.json(
       { error: "Слишком много запросов. Попробуйте позже." },
@@ -34,8 +35,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid data" }, { status: 400 });
   }
 
-  // Dedupe: if an identical (contract+phone+amount) payment was created less than 30s ago,
-  // and we already have its paymentLink (in operationId), return the same paymentLink.
+  // Dedupe double-clicks: if an identical (contract+phone+amount) pending payment
+  // was created less than 30s ago and already got its paymentLink from Tochka,
+  // return the same link instead of creating a new payment.
   const since = new Date(Date.now() - DEDUP_WINDOW_MS);
   const recent = await prisma.payment.findFirst({
     where: {
@@ -44,22 +46,21 @@ export async function POST(request: NextRequest) {
       amountKopecks: parsed.amount * 100,
       status: "pending",
       createdAt: { gte: since },
+      paymentLink: { not: null },
     },
     orderBy: { createdAt: "desc" },
   });
-  if (recent && recent.operationId) {
-    // Reconstruct paymentLink from stored row by calling Tochka again is overkill;
-    // instead we keep a separate column? Simpler: store paymentLink in raw row at insert time.
-    // We already store operationId; we'll compose a stable result from rawWebhook if present.
-    // For idempotency we keep a tiny in-memory map keyed by paymentLinkId for the current process.
-    const cached = inFlightLinks.get(recent.paymentLinkId);
-    if (cached) return NextResponse.json({ paymentLink: cached, orderId: recent.paymentLinkId });
+  if (recent && recent.paymentLink) {
+    return NextResponse.json({
+      paymentLink: recent.paymentLink,
+      orderId: recent.paymentLinkId,
+    });
   }
 
   const origin = new URL(request.url).origin;
   const paymentLinkId = `ord_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
 
-  // Create row first so we have a record even if the API call fails.
+  // Persist the row first so we keep a record even if the API call fails.
   await prisma.payment.create({
     data: {
       paymentLinkId,
@@ -86,19 +87,25 @@ export async function POST(request: NextRequest) {
       failUrl: `${origin}/payment?status=fail&order=${paymentLinkId}`,
     });
 
-    // Best-effort: store operationId (ignore unique-constraint conflicts in tests/retries).
     try {
       await prisma.payment.update({
         where: { paymentLinkId },
-        data: { operationId: result.operationId },
+        data: {
+          operationId: result.operationId,
+          paymentLink: result.paymentLink,
+        },
       });
-    } catch {
-      // Unique constraint violation means another row already holds this operationId.
-      // Not fatal — we still return the paymentLink to the user.
+    } catch (err) {
+      // P2002 = unique-constraint violation on operationId. Only happens in tests with
+      // duplicate mocked operationIds; in production Tochka returns unique IDs per call.
+      if (
+        !(err instanceof Prisma.PrismaClientKnownRequestError) ||
+        err.code !== "P2002"
+      ) {
+        console.warn("[payment/init] failed to persist operationId/paymentLink:", err);
+      }
+      // Either way, we still return the paymentLink to the user; webhook will reconcile via paymentLinkId.
     }
-
-    inFlightLinks.set(paymentLinkId, result.paymentLink);
-    setTimeout(() => inFlightLinks.delete(paymentLinkId), DEDUP_WINDOW_MS).unref?.();
 
     return NextResponse.json({
       paymentLink: result.paymentLink,
@@ -123,6 +130,3 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
-
-// Process-local cache so two POSTs with identical body within 30s share one paymentLink.
-const inFlightLinks = new Map<string, string>();

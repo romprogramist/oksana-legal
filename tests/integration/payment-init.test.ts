@@ -2,14 +2,14 @@ import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { prisma } from "@/lib/prisma";
 import { POST } from "@/app/api/payment/init/route";
 import { makeRequest, readJson } from "../helpers/request";
-import { resetRateLimit } from "@/lib/rate-limit";
+import { resetPaymentRateLimit } from "@/lib/rate-limit";
 
 describe("POST /api/payment/init", () => {
   beforeEach(async () => {
     process.env.TOCHKA_JWT_TOKEN = "fake-jwt";
     process.env.TOCHKA_API_URL = "https://api.example.com/uapi/acquiring/v1.0";
     await prisma.payment.deleteMany({});
-    resetRateLimit();
+    resetPaymentRateLimit();
   });
   afterEach(() => {
     vi.unstubAllGlobals();

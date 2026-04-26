@@ -48,9 +48,19 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: true, ignored: "unknown status" });
   }
 
-  const existing = await prisma.payment.findUnique({ where: { operationId: payload.operationId } });
+  // Primary lookup: by operationId. Fallback: by paymentLinkId if init's operationId
+  // write failed (transient DB error, retried request, etc.) — this prevents money in
+  // the bank with no traceable row in our DB.
+  let existing = await prisma.payment.findUnique({ where: { operationId: payload.operationId } });
+  if (!existing && payload.paymentLinkId) {
+    existing = await prisma.payment.findUnique({ where: { paymentLinkId: payload.paymentLinkId } });
+  }
   if (!existing) {
-    console.info("[payment/notify] unknown operationId:", payload.operationId);
+    console.info(
+      "[payment/notify] unknown operationId/paymentLinkId:",
+      payload.operationId,
+      payload.paymentLinkId,
+    );
     return NextResponse.json({ ok: true, ignored: "unknown operationId" });
   }
 
@@ -60,8 +70,9 @@ export async function POST(request: NextRequest) {
   }
 
   await prisma.payment.update({
-    where: { operationId: payload.operationId },
+    where: { id: existing.id },
     data: {
+      operationId: payload.operationId,
       status: newStatus,
       paidAt: newStatus === "succeeded" ? new Date() : undefined,
       rawWebhook: payload as unknown as Prisma.InputJsonValue,

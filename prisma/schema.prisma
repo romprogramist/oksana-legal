@@ -114,6 +114,7 @@ model Payment {
   id             String        @id @default(cuid())
   operationId    String?       @unique @map("operation_id") @db.VarChar(100)
   paymentLinkId  String        @unique @map("payment_link_id") @db.VarChar(100)
+  paymentLink    String?       @map("payment_link") @db.Text
   contractNumber String        @map("contract_number") @db.VarChar(100)
   firstName      String        @map("first_name") @db.VarChar(100)
   lastName       String        @map("last_name") @db.VarChar(100)
