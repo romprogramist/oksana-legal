@@ -9,7 +9,7 @@ const schema = z.object({
   contractNumber: z.string().trim().min(1).max(100),
   firstName: z.string().trim().min(1).max(100),
   lastName: z.string().trim().min(1).max(100),
-  phone: z.string().trim().min(2).max(30),
+  phone: z.string().trim().min(5).max(30),
   email: z.string().email().max(200).optional(),
 });
 

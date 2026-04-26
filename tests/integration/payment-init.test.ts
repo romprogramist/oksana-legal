@@ -74,7 +74,7 @@ describe("POST /api/payment/init", () => {
     const req = makeRequest("/api/payment/init", {
       method: "POST",
       body: {
-        amount: 100, contractNumber: "C", firstName: "F", lastName: "L", phone: "+7",
+        amount: 100, contractNumber: "C", firstName: "F", lastName: "L", phone: "+71234",
       },
     });
     const res = await POST(req as any);
@@ -86,7 +86,7 @@ describe("POST /api/payment/init", () => {
     const req = makeRequest("/api/payment/init", {
       method: "POST",
       body: {
-        amount: 100, contractNumber: "C", firstName: "F", lastName: "L", phone: "+7",
+        amount: 100, contractNumber: "C", firstName: "F", lastName: "L", phone: "+71234",
       },
     });
     const res = await POST(req as any);
@@ -119,7 +119,7 @@ describe("POST /api/payment/init", () => {
       contractNumber: `RL-${i}`,
       firstName: "F",
       lastName: "L",
-      phone: "+7",
+      phone: "+71234",
     });
     for (let i = 0; i < 5; i++) {
       const r = await POST(makeRequest("/api/payment/init", {
