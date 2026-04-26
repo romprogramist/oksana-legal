@@ -78,15 +78,16 @@ export default function PaymentPage() {
         }),
       });
       const data = (await response.json()) as {
-        paymentUrl?: string;
+        paymentLink?: string;
+        orderId?: string;
         error?: string;
       };
-      if (!response.ok || !data.paymentUrl) {
+      if (!response.ok || !data.paymentLink) {
         setErrorMessage(data.error ?? "Не удалось инициировать платёж");
         setIsSubmitting(false);
         return;
       }
-      window.location.href = data.paymentUrl;
+      window.location.href = data.paymentLink;
     } catch {
       setErrorMessage("Ошибка сети. Проверьте соединение и попробуйте снова.");
       setIsSubmitting(false);
@@ -94,13 +95,7 @@ export default function PaymentPage() {
   };
 
   if (paymentStatus === "success") {
-    return (
-      <StatusScreen
-        icon={<CheckCircle2 className="w-14 h-14 text-green-500" />}
-        title="Оплата прошла успешно"
-        description="Спасибо! Чек отправлен на указанный email. Мы свяжемся с вами в ближайшее время."
-      />
-    );
+    return <SuccessWithPolling />;
   }
 
   if (paymentStatus === "fail") {
@@ -340,5 +335,78 @@ function StatusScreen({
         </a>
       </div>
     </div>
+  );
+}
+
+function SuccessWithPolling() {
+  const [resolved, setResolved] = useState<"pending" | "succeeded" | "failed" | "timeout">("pending");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const order = new URLSearchParams(window.location.search).get("order");
+    if (!order) {
+      setResolved("succeeded");
+      return;
+    }
+    let cancelled = false;
+    let attempts = 0;
+    const MAX_ATTEMPTS = 8;
+
+    async function tick() {
+      if (cancelled) return;
+      attempts += 1;
+      try {
+        const r = await fetch(`/api/payment/status?order=${encodeURIComponent(order!)}`);
+        if (r.ok) {
+          const j = (await r.json()) as { status: string };
+          if (j.status === "succeeded") { setResolved("succeeded"); return; }
+          if (j.status === "failed") { setResolved("failed"); return; }
+        }
+      } catch {
+        /* ignore network errors during polling */
+      }
+      if (attempts >= MAX_ATTEMPTS) {
+        setResolved("timeout");
+        return;
+      }
+      setTimeout(tick, 2000);
+    }
+    tick();
+    return () => { cancelled = true; };
+  }, []);
+
+  if (resolved === "pending") {
+    return (
+      <StatusScreen
+        icon={<Loader2 className="w-14 h-14 text-primary animate-spin" />}
+        title="Обрабатываем платёж…"
+        description="Это занимает до 15 секунд. Не закрывайте страницу."
+      />
+    );
+  }
+  if (resolved === "failed") {
+    return (
+      <StatusScreen
+        icon={<XCircle className="w-14 h-14 text-red-500" />}
+        title="Оплата не прошла"
+        description="Платёж был отклонён. Попробуйте снова или свяжитесь с нами."
+      />
+    );
+  }
+  if (resolved === "timeout") {
+    return (
+      <StatusScreen
+        icon={<CheckCircle2 className="w-14 h-14 text-green-500" />}
+        title="Платёж в обработке"
+        description="Деньги в пути. Чек придёт SMS/email в течение пары минут — мы свяжемся с вами после подтверждения."
+      />
+    );
+  }
+  return (
+    <StatusScreen
+      icon={<CheckCircle2 className="w-14 h-14 text-green-500" />}
+      title="Оплата прошла успешно"
+      description="Спасибо! Чек отправлен на указанный email/телефон. Мы свяжемся с вами в ближайшее время."
+    />
   );
 }
