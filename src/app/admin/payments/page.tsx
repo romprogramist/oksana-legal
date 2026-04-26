@@ -47,18 +47,16 @@ export default function AdminPaymentsPage() {
   const [q, setQ] = useState("");
   const [loading, setLoading] = useState(true);
 
-  async function load() {
-    setLoading(true);
-    const params = new URLSearchParams();
-    if (tab !== "all") params.set("status", tab);
-    if (q.trim()) params.set("q", q.trim());
-    const res = await fetch(`/api/admin/payments?${params}`);
-    if (res.ok) setRows(await res.json());
-    setLoading(false);
-  }
-
   useEffect(() => {
-    const id = setTimeout(load, 200); // debounce search input
+    const id = setTimeout(async () => {
+      setLoading(true);
+      const params = new URLSearchParams();
+      if (tab !== "all") params.set("status", tab);
+      if (q.trim()) params.set("q", q.trim());
+      const res = await fetch(`/api/admin/payments?${params}`);
+      if (res.ok) setRows(await res.json());
+      setLoading(false);
+    }, 200); // debounce search input
     return () => clearTimeout(id);
   }, [tab, q]);
 

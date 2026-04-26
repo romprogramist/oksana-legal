@@ -149,19 +149,22 @@ export async function createPayment(p: CreatePaymentParams): Promise<TochkaPayme
     body: JSON.stringify(body),
   });
   const text = await res.text();
-  let json: any;
-  try { json = JSON.parse(text); } catch { json = null; }
+  let json: unknown = null;
+  try { json = JSON.parse(text); } catch { /* keep null */ }
+  const j = json as
+    | { Data?: { paymentLink?: string; operationId?: string }; Errors?: Array<{ message?: string }>; message?: string }
+    | null;
 
   if (!res.ok) {
     const upstreamMsg =
-      (json?.Errors?.[0]?.message as string | undefined) ??
-      (json?.message as string | undefined) ??
+      j?.Errors?.[0]?.message ??
+      j?.message ??
       `Tochka API ${res.status}`;
     throw new TochkaError(upstreamMsg, res.status);
   }
 
-  const link = json?.Data?.paymentLink as string | undefined;
-  const opId = json?.Data?.operationId as string | undefined;
+  const link = j?.Data?.paymentLink;
+  const opId = j?.Data?.operationId;
   if (!link || !opId) {
     throw new TochkaError("Tochka response missing paymentLink/operationId", res.status);
   }

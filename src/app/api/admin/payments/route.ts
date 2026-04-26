@@ -1,13 +1,14 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(req: NextRequest) {
   const status = req.nextUrl.searchParams.get("status");
   const q = req.nextUrl.searchParams.get("q");
 
-  const where: any = {};
+  const where: Prisma.PaymentWhereInput = {};
   if (status && ["pending", "authorized", "succeeded", "failed"].includes(status)) {
-    where.status = status;
+    where.status = status as Prisma.PaymentWhereInput["status"];
   }
   if (q && q.trim()) {
     const term = q.trim();

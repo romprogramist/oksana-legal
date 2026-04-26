@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { verifyWebhook } from "@/lib/tochka";
 
@@ -63,7 +64,7 @@ export async function POST(request: NextRequest) {
     data: {
       status: newStatus,
       paidAt: newStatus === "succeeded" ? new Date() : undefined,
-      rawWebhook: payload as any,
+      rawWebhook: payload as unknown as Prisma.InputJsonValue,
     },
   });
 
