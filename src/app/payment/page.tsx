@@ -56,7 +56,8 @@ export default function PaymentPage() {
     contractNumber.trim() &&
     phone.length >= 10 &&
     firstName.trim() &&
-    lastName.trim();
+    lastName.trim() &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   const amountNumber = Number(amount);
   const isStep2Valid = amountNumber >= 1 && agreed;
 
@@ -74,7 +75,7 @@ export default function PaymentPage() {
           firstName: firstName.trim(),
           lastName: lastName.trim(),
           phone,
-          email: email.trim() || undefined,
+          email: email.trim(),
         }),
       });
       const data = (await response.json()) as {
@@ -161,7 +162,8 @@ export default function PaymentPage() {
             </div>
             <input
               type="email"
-              placeholder="Email (для чека)"
+              placeholder="Email (для электронного чека)"
+              required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:outline-none text-sm"

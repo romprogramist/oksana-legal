@@ -117,7 +117,7 @@ export function buildCreatePaymentBody(p: CreatePaymentParams) {
           vatType: "none",
           paymentMethod: "full_payment",
           paymentObject: "service",
-          measure: "шт",
+          measure: "шт.",
         },
       ],
       taxSystemCode: TAX_SYSTEM_CODE,

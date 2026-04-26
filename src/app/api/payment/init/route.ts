@@ -11,7 +11,7 @@ const schema = z.object({
   firstName: z.string().trim().min(1).max(100),
   lastName: z.string().trim().min(1).max(100),
   phone: z.string().trim().min(5).max(30),
-  email: z.string().email().max(200).optional(),
+  email: z.string().email().max(200),
 });
 
 const DEDUP_WINDOW_MS = 30_000;

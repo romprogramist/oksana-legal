@@ -103,7 +103,7 @@ describe("buildCreatePaymentBody", () => {
             vatType: "none",
             paymentMethod: "full_payment",
             paymentObject: "service",
-            measure: "шт",
+            measure: "шт.",
           },
         ],
         taxSystemCode: "usn_income",

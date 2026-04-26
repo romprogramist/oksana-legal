@@ -74,7 +74,7 @@ describe("POST /api/payment/init", () => {
     const req = makeRequest("/api/payment/init", {
       method: "POST",
       body: {
-        amount: 100, contractNumber: "C", firstName: "F", lastName: "L", phone: "+71234",
+        amount: 100, contractNumber: "C", firstName: "F", lastName: "L", phone: "+71234", email: "test@example.com",
       },
     });
     const res = await POST(req as any);
@@ -86,7 +86,7 @@ describe("POST /api/payment/init", () => {
     const req = makeRequest("/api/payment/init", {
       method: "POST",
       body: {
-        amount: 100, contractNumber: "C", firstName: "F", lastName: "L", phone: "+71234",
+        amount: 100, contractNumber: "C", firstName: "F", lastName: "L", phone: "+71234", email: "test@example.com",
       },
     });
     const res = await POST(req as any);
@@ -96,7 +96,7 @@ describe("POST /api/payment/init", () => {
   it("dedupes double-click within 30s — returns same paymentLink, no extra DB row", async () => {
     mockTochkaSuccess("OP-DEDUP");
     const payload = {
-      amount: 100, contractNumber: "DEDUP", firstName: "F", lastName: "L", phone: "+79991112233",
+      amount: 100, contractNumber: "DEDUP", firstName: "F", lastName: "L", phone: "+79991112233", email: "test@example.com",
     };
     const r1 = await POST(makeRequest("/api/payment/init", { method: "POST", body: payload }) as any);
     const r2 = await POST(makeRequest("/api/payment/init", { method: "POST", body: payload }) as any);
@@ -120,6 +120,7 @@ describe("POST /api/payment/init", () => {
       firstName: "F",
       lastName: "L",
       phone: "+71234",
+      email: "test@example.com",
     });
     for (let i = 0; i < 5; i++) {
       const r = await POST(makeRequest("/api/payment/init", {
