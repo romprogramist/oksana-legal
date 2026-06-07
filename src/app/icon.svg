@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Весы правосудия">
+  <rect width="64" height="64" rx="14" fill="#1E4D8C"/>
+  <g fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- центральная стойка -->
+    <path d="M32 17 V48"/>
+    <!-- коромысло -->
+    <path d="M15 19 H49"/>
+    <!-- основание -->
+    <path d="M32 48 L24 52 H40 Z"/>
+    <path d="M22 52 H42"/>
+    <!-- подвесы левой чаши -->
+    <path d="M15 19 L9 31 M15 19 L21 31"/>
+    <!-- подвесы правой чаши -->
+    <path d="M49 19 L43 31 M49 19 L55 31"/>
+    <!-- чаши -->
+    <path d="M9 31 A6.5 6.5 0 0 0 21 31"/>
+    <path d="M43 31 A6.5 6.5 0 0 0 55 31"/>
+  </g>
+  <!-- навершие -->
+  <circle cx="32" cy="14" r="2.8" fill="#FFFFFF"/>
+</svg>
