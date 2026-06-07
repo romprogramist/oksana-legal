@@ -63,21 +63,6 @@ export const HOW_WE_WORK = {
   ],
 } as const;
 
-export const PAYMENT_METHODS = [
-  {
-    title: "Банковские карты",
-    description: "Visa, Mastercard, МИР — любой банк РФ",
-  },
-  {
-    title: "Система быстрых платежей (СБП)",
-    description: "Мгновенная оплата по QR-коду через любое банковское приложение",
-  },
-  {
-    title: "T-Pay",
-    description: "Оплата в один клик для клиентов Т-Банка",
-  },
-] as const;
-
 export const STATS = [
   { value: "500+", label: "успешных дел" },
   { value: "10+", label: "лет опыта" },
@@ -145,7 +130,6 @@ export const NAV_LINKS = [
   { href: "#hero", label: "Главная" },
   { href: "#services", label: "Услуги" },
   { href: "#pricing", label: "Цены" },
-  { href: "/payment-methods", label: "Оплата" },
   { href: "#how-we-work", label: "Как работаем" },
   { href: "#faq", label: "FAQ" },
   { href: "#useful", label: "Полезное" },

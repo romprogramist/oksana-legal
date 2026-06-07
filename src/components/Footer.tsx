@@ -43,7 +43,6 @@ export default function Footer() {
               <li><a href="/requisites" className="hover:text-white transition-colors">Реквизиты</a></li>
               <li><a href="/offer" className="hover:text-white transition-colors">Публичная оферта</a></li>
               <li><a href="/refund" className="hover:text-white transition-colors">Возврат средств</a></li>
-              <li><a href="/payment-methods" className="hover:text-white transition-colors">Способы оплаты</a></li>
               <li><a href="/privacy" className="hover:text-white transition-colors">Политика конфиденциальности</a></li>
             </ul>
           </div>

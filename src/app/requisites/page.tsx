@@ -138,14 +138,6 @@ export default function RequisitesPage() {
                   Политика обработки персональных данных
                 </a>
               </li>
-              <li>
-                <a
-                  href="/payment-methods"
-                  className="text-primary hover:underline"
-                >
-                  Способы оплаты
-                </a>
-              </li>
             </ul>
           </div>
         </div>
