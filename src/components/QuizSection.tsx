@@ -5,14 +5,19 @@ import { ArrowRight, ArrowLeft, Check } from "lucide-react";
 import { QUIZ_QUESTIONS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import AnimatedSection from "./AnimatedSection";
+import ConsentCheckboxes from "./ConsentCheckboxes";
 
 export default function QuizSection() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [contactName, setContactName] = useState("");
   const [contactPhone, setContactPhone] = useState("");
+  const [pdAgreed, setPdAgreed] = useState(false);
+  const [offerAgreed, setOfferAgreed] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const consentGiven = pdAgreed && offerAgreed;
 
   const totalSteps = QUIZ_QUESTIONS.length + 1;
   const isContactStep = step === QUIZ_QUESTIONS.length;
@@ -31,7 +36,7 @@ export default function QuizSection() {
   };
 
   const handleSubmit = async () => {
-    if (!contactName.trim() || !contactPhone.trim()) return;
+    if (!contactName.trim() || !contactPhone.trim() || !consentGiven) return;
     setIsSubmitting(true);
     try {
       await fetch("/api/contact", {
@@ -135,6 +140,14 @@ export default function QuizSection() {
                       className="px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white placeholder:text-white/50 focus:border-white focus:outline-none"
                     />
                   </div>
+                  <ConsentCheckboxes
+                    theme="dark"
+                    className="mt-4 max-w-lg"
+                    pd={pdAgreed}
+                    onPdChange={setPdAgreed}
+                    offer={offerAgreed}
+                    onOfferChange={setOfferAgreed}
+                  />
                 </>
               )}
             </div>
@@ -153,7 +166,7 @@ export default function QuizSection() {
               {isContactStep ? (
                 <button
                   onClick={handleSubmit}
-                  disabled={isSubmitting || !contactName.trim() || !contactPhone.trim()}
+                  disabled={isSubmitting || !contactName.trim() || !contactPhone.trim() || !consentGiven}
                   className="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary rounded-full font-medium hover:bg-white/90 transition-colors disabled:opacity-50"
                 >
                   {isSubmitting ? "Отправка..." : "Получить консультацию"}

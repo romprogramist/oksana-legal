@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Phone, Mail, MapPin, Clock, Send, Check } from "lucide-react";
 import { CONTACT } from "@/lib/constants";
 import AnimatedSection from "./AnimatedSection";
+import ConsentCheckboxes from "./ConsentCheckboxes";
 
 const contactInfo = [
   { icon: Phone, label: "Телефон", value: CONTACT.phone, subtext: "Звоните в рабочее время", href: CONTACT.phoneHref },
@@ -17,13 +18,16 @@ export default function ContactSection() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [agreed, setAgreed] = useState(false);
+  const [pdAgreed, setPdAgreed] = useState(false);
+  const [offerAgreed, setOfferAgreed] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  const consentGiven = pdAgreed && offerAgreed;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !phone.trim() || !agreed) return;
+    if (!name.trim() || !phone.trim() || !consentGiven) return;
     setIsSubmitting(true);
     try {
       await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name, phone, email: email || undefined, message: message || undefined }) });
@@ -77,11 +81,13 @@ export default function ContactSection() {
                   <input type="tel" placeholder="Телефон" value={phone} onChange={(e) => setPhone(e.target.value)} required className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:outline-none text-sm" />
                   <input type="email" placeholder="Email (необязательно)" value={email} onChange={(e) => setEmail(e.target.value)} className="hidden md:block w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:outline-none text-sm" />
                   <textarea placeholder="Кратко опишите вашу ситуацию" value={message} onChange={(e) => setMessage(e.target.value)} rows={3} className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:outline-none text-sm resize-none" />
-                  <label className="flex items-start gap-2 cursor-pointer">
-                    <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} className="mt-1 rounded border-gray-300 text-primary focus:ring-primary" />
-                    <span className="text-xs text-text-secondary">Нажимая кнопку, вы соглашаетесь с <a href="/privacy" className="text-primary underline">политикой конфиденциальности</a></span>
-                  </label>
-                  <button type="submit" disabled={isSubmitting || !agreed} className="w-full py-3.5 bg-accent text-white rounded-xl font-medium hover:bg-accent-dark transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+                  <ConsentCheckboxes
+                    pd={pdAgreed}
+                    onPdChange={setPdAgreed}
+                    offer={offerAgreed}
+                    onOfferChange={setOfferAgreed}
+                  />
+                  <button type="submit" disabled={isSubmitting || !consentGiven} className="w-full py-3.5 bg-accent text-white rounded-xl font-medium hover:bg-accent-dark transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
                     <Send className="w-4 h-4" />{isSubmitting ? "Отправка..." : "Отправить заявку"}
                   </button>
                 </form>

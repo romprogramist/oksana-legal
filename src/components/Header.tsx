@@ -1,11 +1,16 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import { Menu, X, Phone } from "lucide-react";
 import { NAV_LINKS, CONTACT } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import NavMore from "./NavMore";
 
 const EASE = "ease-[cubic-bezier(0.22,1,0.36,1)]";
+
+const PRIMARY_LINKS = NAV_LINKS.filter((l) => !("secondary" in l && l.secondary));
+const MORE_LINKS = NAV_LINKS.filter((l) => "secondary" in l && l.secondary);
 
 export default function Header() {
   const [mounted, setMounted] = useState(false);
@@ -107,18 +112,14 @@ export default function Header() {
         </a>
 
         <nav className="hidden lg:flex items-center gap-6">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className={cn(
-                "relative group text-[13px] font-medium transition-colors duration-300 motion-reduce:transition-none",
-                solid
-                  ? "text-text-secondary hover:text-text-primary"
-                  : "text-white/70 hover:text-white"
-              )}
-            >
-              {link.label}
+          {PRIMARY_LINKS.map((link) => {
+            const linkClass = cn(
+              "relative group text-[13px] font-medium transition-colors duration-300 motion-reduce:transition-none",
+              solid
+                ? "text-text-secondary hover:text-text-primary"
+                : "text-white/70 hover:text-white"
+            );
+            const underline = (
               <span
                 aria-hidden="true"
                 className={cn(
@@ -126,8 +127,20 @@ export default function Header() {
                   EASE
                 )}
               />
-            </a>
-          ))}
+            );
+            return "page" in link && link.page ? (
+              <Link key={link.href} href={link.href} className={linkClass}>
+                {link.label}
+                {underline}
+              </Link>
+            ) : (
+              <a key={link.href} href={link.href} className={linkClass}>
+                {link.label}
+                {underline}
+              </a>
+            );
+          })}
+          <NavMore links={MORE_LINKS} solid={solid} />
         </nav>
 
         <div className="hidden lg:flex items-center gap-5">
@@ -202,25 +215,39 @@ export default function Header() {
         <div className="overflow-hidden min-h-0">
           <div className="bg-white/95 backdrop-blur-xl border-t border-gray-100/50">
             <nav className="container-narrow py-3 flex flex-col gap-1">
-              {NAV_LINKS.map((link, i) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setIsMenuOpen(false)}
-                  style={{
-                    transitionDelay: isMenuOpen ? `${i * 50}ms` : "0ms",
-                  }}
-                  className={cn(
-                    "text-sm text-text-secondary hover:text-primary py-2.5 transition-all duration-300 motion-reduce:transition-none motion-reduce:transform-none",
-                    EASE,
-                    isMenuOpen
-                      ? "opacity-100 translate-x-0"
-                      : "opacity-0 -translate-x-2"
-                  )}
-                >
-                  {link.label}
-                </a>
-              ))}
+              {NAV_LINKS.map((link, i) => {
+                const style = {
+                  transitionDelay: isMenuOpen ? `${i * 50}ms` : "0ms",
+                };
+                const mobileClass = cn(
+                  "text-sm text-text-secondary hover:text-primary py-2.5 transition-all duration-300 motion-reduce:transition-none motion-reduce:transform-none",
+                  EASE,
+                  isMenuOpen
+                    ? "opacity-100 translate-x-0"
+                    : "opacity-0 -translate-x-2"
+                );
+                return "page" in link && link.page ? (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    style={style}
+                    className={mobileClass}
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    style={style}
+                    className={mobileClass}
+                  >
+                    {link.label}
+                  </a>
+                );
+              })}
               <div className="h-px bg-gray-100 my-1" />
               <a
                 href={CONTACT.phoneHref}

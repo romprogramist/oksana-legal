@@ -4,7 +4,7 @@ export const CONTACT = {
   email: "oksana.riverside@gmail.com",
   emailHref: "mailto:oksana.riverside@gmail.com",
   whatsapp: "https://wa.me/79289077260",
-  max: "https://max.ru/+79289077260",
+  max: "https://max.ru/u/f9LHodD0cOL6K4FnPIB69hvQN0ESGr_sr1HXJdBztYw3n2xAloFEoFpJQp8",
   instagram: "https://instagram.com/bankrotstvo.oksana.rf",
   instagramHandle: "@bankrotstvo.oksana.rf",
   address: "г. Новочеркасск",
@@ -127,12 +127,12 @@ export const QUIZ_QUESTIONS = [
 ] as const;
 
 export const NAV_LINKS = [
-  { href: "#hero", label: "Главная" },
   { href: "#services", label: "Услуги" },
   { href: "#pricing", label: "Цены" },
-  { href: "#how-we-work", label: "Как работаем" },
-  { href: "#faq", label: "FAQ" },
-  { href: "#useful", label: "Полезное" },
+  { href: "/otzyv", label: "Отзывы", page: true },
+  { href: "#how-we-work", label: "Как работаем", secondary: true },
+  { href: "#faq", label: "FAQ", secondary: true },
+  { href: "#useful", label: "Полезное", secondary: true },
   { href: "#contact", label: "Контакты" },
 ] as const;
 

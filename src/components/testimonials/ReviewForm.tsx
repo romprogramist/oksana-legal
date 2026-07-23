@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+import ConsentCheckboxes from "@/components/ConsentCheckboxes";
 
 export type ReviewFormVariant = "modal" | "page";
 
@@ -45,6 +46,7 @@ export default function ReviewForm({
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [website, setWebsite] = useState("");
+  const [pdAgreed, setPdAgreed] = useState(false);
   const [errors, setErrors] = useState<FieldErrors>({});
   const [submitError, setSubmitError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -172,6 +174,8 @@ export default function ReviewForm({
 
       {submitError && <p className="text-sm text-red-500">{submitError}</p>}
 
+      <ConsentCheckboxes pd={pdAgreed} onPdChange={setPdAgreed} />
+
       {variant === "modal" ? (
         <div className="flex gap-3 pt-2">
           <button
@@ -184,7 +188,7 @@ export default function ReviewForm({
           </button>
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || !pdAgreed}
             className="flex-1 py-3 rounded-xl bg-primary text-white text-sm font-medium hover:bg-primary-light transition-colors disabled:opacity-50"
           >
             {isSubmitting ? "Отправка..." : "Отправить"}
@@ -193,7 +197,7 @@ export default function ReviewForm({
       ) : (
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || !pdAgreed}
           className="w-full py-3.5 rounded-xl bg-primary text-white text-base font-medium hover:bg-primary-light transition-colors disabled:opacity-50"
         >
           {isSubmitting ? "Отправка..." : "Отправить отзыв"}
