@@ -19,8 +19,22 @@
     @apply bg-background text-text-primary antialiased;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-display font-semibold tracking-tight;
+  /* Unbounded — широкий акцидентный гротеск: он работает на крупных заголовках,
+     мелкие подзаголовки и футер остаются на основном шрифте. */
+  h1, h2, h3 {
+    @apply font-display font-medium tracking-[-0.01em];
+  }
+
+  h1, h2 {
+    @apply leading-[1.1];
+  }
+
+  h3 {
+    @apply leading-snug;
+  }
+
+  h4, h5, h6 {
+    @apply font-sans font-semibold;
   }
 }
 

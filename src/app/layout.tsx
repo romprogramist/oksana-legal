@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Unbounded, Golos_Text } from "next/font/google";
 import CookieConsent from "@/components/CookieConsent";
 import "./globals.css";
 
-const inter = Inter({
+// Заголовки — характерный широкий гротеск, текст — Golos с родной кириллицей.
+const unbounded = Unbounded({
   subsets: ["latin", "cyrillic"],
   display: "swap",
-  variable: "--font-inter",
+  variable: "--font-display",
+});
+
+const golos = Golos_Text({
+  subsets: ["latin", "cyrillic"],
+  display: "swap",
+  variable: "--font-sans",
 });
 
 export const metadata: Metadata = {
@@ -30,7 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ru" className={inter.variable}>
+    <html lang="ru" className={`${unbounded.variable} ${golos.variable}`}>
       <body className="font-sans">
         {children}
         <CookieConsent />

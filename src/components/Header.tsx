@@ -103,7 +103,7 @@ export default function Header() {
         >
           <span
             className={cn(
-              "text-lg font-semibold tracking-tight transition-colors duration-500 motion-reduce:transition-none",
+              "font-display text-base md:text-lg font-medium tracking-tight transition-colors duration-500 motion-reduce:transition-none",
               solid ? "text-text-primary" : "text-white"
             )}
           >

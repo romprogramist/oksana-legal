@@ -16,7 +16,7 @@ export default function ThankYouPage() {
           <div className="w-16 h-16 mx-auto rounded-full bg-green-50 flex items-center justify-center">
             <CheckCircle2 className="w-10 h-10 text-green-600" />
           </div>
-          <h1 className="mt-6 text-2xl md:text-3xl font-semibold text-text-primary">Спасибо!</h1>
+          <h1 className="mt-6 text-2xl md:text-3xl font-medium text-text-primary">Спасибо!</h1>
           <p className="mt-3 text-text-secondary">
             Ваш отзыв отправлен. Он появится на сайте после проверки.
           </p>

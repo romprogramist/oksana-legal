@@ -13,7 +13,7 @@ export default function CasesSection() {
             <p className="text-sm font-medium text-primary uppercase tracking-wider">
               Результаты
             </p>
-            <h2 className="mt-2 text-3xl md:text-4xl font-semibold text-primary">
+            <h2 className="mt-2 text-3xl md:text-4xl font-medium text-primary">
               Примеры завершённых дел
             </h2>
             <p className="mt-3 text-text-secondary max-w-2xl mx-auto">

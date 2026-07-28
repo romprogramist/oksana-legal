@@ -24,7 +24,7 @@ export default function HeroSection() {
 
       <div className="relative z-10 container-narrow py-10 lg:w-full lg:pt-32 lg:pb-8">
         <AnimatedSection animation="fade-up">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-white max-w-3xl leading-tight">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium text-white max-w-4xl leading-tight">
             Помощь в списании долгов
             <br />
             <span className="text-white/90">и банкротстве</span>

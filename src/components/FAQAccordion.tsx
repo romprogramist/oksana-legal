@@ -35,7 +35,7 @@ export default function FAQAccordion({ items }: { items: FAQItemT[] }) {
         <AnimatedSection animation="fade-up">
           <div className="text-center mb-12">
             <p className="text-sm font-medium text-primary uppercase tracking-wider">Вопросы и ответы</p>
-            <h2 className="mt-2 text-3xl md:text-4xl font-semibold text-primary">Частые вопросы о банкротстве</h2>
+            <h2 className="mt-2 text-3xl md:text-4xl font-medium text-primary">Частые вопросы о банкротстве</h2>
             <p className="mt-3 text-text-secondary max-w-2xl mx-auto">Ответы на самые популярные вопросы наших клиентов</p>
           </div>
         </AnimatedSection>

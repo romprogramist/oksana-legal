@@ -35,7 +35,7 @@ export default function RequisitesPage() {
             <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
               <Building2 className="w-6 h-6 text-primary" />
             </div>
-            <h1 className="text-3xl md:text-4xl font-semibold text-text-primary">
+            <h1 className="text-3xl md:text-4xl font-medium text-text-primary">
               Реквизиты
             </h1>
           </div>
@@ -47,7 +47,7 @@ export default function RequisitesPage() {
           </p>
 
           <div className="bg-white rounded-3xl shadow-soft p-6 md:p-8 mb-8">
-            <h2 className="text-xl font-semibold text-text-primary mb-6">
+            <h2 className="text-xl font-medium text-text-primary mb-6">
               Сведения об индивидуальном предпринимателе
             </h2>
             <dl className="divide-y divide-gray-100">
@@ -66,7 +66,7 @@ export default function RequisitesPage() {
           </div>
 
           <div className="bg-white rounded-3xl shadow-soft p-6 md:p-8 mb-8">
-            <h2 className="text-xl font-semibold text-text-primary mb-6">
+            <h2 className="text-xl font-medium text-text-primary mb-6">
               Контактная информация
             </h2>
             <ul className="space-y-4 text-sm">
@@ -118,7 +118,7 @@ export default function RequisitesPage() {
           </div>
 
           <div className="bg-primary/5 border border-primary/10 rounded-3xl p-6 md:p-8">
-            <h2 className="text-lg font-semibold text-text-primary mb-4">
+            <h2 className="text-lg font-medium text-text-primary mb-4">
               Документы
             </h2>
             <ul className="space-y-2 text-sm">

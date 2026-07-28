@@ -42,7 +42,7 @@ export default function ContactSection() {
         <AnimatedSection animation="fade-up">
           <div className="text-center mb-12">
             <p className="text-sm font-medium text-primary uppercase tracking-wider">Контакты</p>
-            <h2 className="mt-2 text-3xl md:text-4xl font-semibold text-text-primary">Свяжитесь с нами</h2>
+            <h2 className="mt-2 text-3xl md:text-4xl font-medium text-text-primary">Свяжитесь с нами</h2>
             <p className="mt-3 text-text-secondary">Получите бесплатную консультацию прямо сейчас</p>
           </div>
         </AnimatedSection>
@@ -69,12 +69,12 @@ export default function ContactSection() {
             {isSubmitted ? (
               <div className="bg-white rounded-3xl shadow-soft p-8 flex flex-col items-center justify-center h-full text-center">
                 <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center"><Check className="w-7 h-7 text-green-600" /></div>
-                <h3 className="mt-4 text-xl font-semibold text-text-primary">Заявка отправлена!</h3>
+                <h3 className="mt-4 text-xl font-medium text-text-primary">Заявка отправлена!</h3>
                 <p className="mt-2 text-text-secondary">Мы перезвоним вам в течение 15 минут.</p>
               </div>
             ) : (
               <div className="bg-white rounded-3xl shadow-soft p-6 md:p-8">
-                <h3 className="text-xl font-semibold text-text-primary">Оставьте заявку</h3>
+                <h3 className="text-xl font-medium text-text-primary">Оставьте заявку</h3>
                 <p className="text-sm text-text-secondary mt-1">Мы перезвоним вам в течение 15 минут</p>
                 <form onSubmit={handleSubmit} className="mt-6 space-y-4">
                   <input type="text" placeholder="Ваше имя" value={name} onChange={(e) => setName(e.target.value)} required className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:outline-none text-sm" />

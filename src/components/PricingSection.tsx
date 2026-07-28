@@ -11,8 +11,8 @@ export default async function PricingSection() {
       <div className="container-narrow">
         <AnimatedSection animation="fade-up">
           <div className="mb-12">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-text-primary uppercase">Стоимость услуг</h2>
-            <p className="text-2xl md:text-3xl text-text-secondary mt-1">прозрачные цены</p>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium text-text-primary">Стоимость услуг</h2>
+            <p className="text-xl md:text-2xl text-text-secondary mt-2">прозрачные цены</p>
             <div className="flex gap-3 mt-4">
               <span className="px-4 py-1.5 border border-text-secondary/30 rounded-full text-sm text-text-secondary">+ Без скрытых платежей</span>
               <span className="px-4 py-1.5 border border-text-secondary/30 rounded-full text-sm text-text-secondary">+ Рассрочка</span>
@@ -26,7 +26,7 @@ export default async function PricingSection() {
               <div className="h-full bg-white rounded-3xl shadow-soft p-6 flex flex-col hover:shadow-medium transition-shadow">
                 <div className="flex items-start gap-2 mb-3">
                   <Check className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
-                  <h3 className="text-lg font-semibold text-text-primary">{item.title}</h3>
+                  <h3 className="text-lg font-medium text-text-primary">{item.title}</h3>
                 </div>
                 {item.note && <p className="text-sm text-text-secondary mb-6 flex-1">{item.note}</p>}
                 <div className="text-2xl font-semibold text-primary">{item.price}</div>

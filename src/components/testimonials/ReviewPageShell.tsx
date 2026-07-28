@@ -7,7 +7,7 @@ export default function ReviewPageShell({ children }: { children: ReactNode }) {
     <div className="min-h-screen flex flex-col bg-background">
       <header className="bg-white border-b border-gray-100">
         <div className="container-narrow flex items-center justify-between h-14">
-          <Link href="/" className="text-lg font-semibold tracking-tight text-text-primary hover:text-primary transition-colors">
+          <Link href="/" className="font-display text-base md:text-lg font-medium tracking-tight text-text-primary hover:text-primary transition-colors">
             Оксана Юрьевна
           </Link>
           <a

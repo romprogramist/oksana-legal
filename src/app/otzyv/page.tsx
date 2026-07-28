@@ -15,7 +15,7 @@ export default function LeaveReviewPage() {
         <div className="max-w-xl mx-auto">
           <div className="text-center mb-8">
             <p className="text-sm font-medium text-primary uppercase tracking-wider">Отзыв</p>
-            <h1 className="mt-2 text-3xl md:text-4xl font-semibold text-text-primary">Поделитесь впечатлением</h1>
+            <h1 className="mt-2 text-3xl md:text-4xl font-medium text-text-primary">Поделитесь впечатлением</h1>
             <p className="mt-3 text-text-secondary">
               Нам важно ваше мнение. Ваш отзыв появится на сайте после проверки.
             </p>

@@ -45,7 +45,7 @@ export default function TestimonialsSection() {
         <AnimatedSection animation="fade-up">
           <div className="text-center mb-12">
             <p className="text-sm font-medium text-primary uppercase tracking-wider">Отзывы клиентов</p>
-            <h2 className="mt-2 text-3xl md:text-4xl font-semibold text-text-primary">Истории успеха наших клиентов</h2>
+            <h2 className="mt-2 text-3xl md:text-4xl font-medium text-text-primary">Истории успеха наших клиентов</h2>
             <p className="mt-3 text-text-secondary">Более 500 клиентов уже освободились от долгов с нашей помощью</p>
           </div>
         </AnimatedSection>
@@ -100,7 +100,7 @@ export default function TestimonialsSection() {
               <button onClick={() => setShowForm(false)} className="absolute top-4 right-4 text-text-secondary hover:text-text-primary" aria-label="Закрыть">
                 <X className="w-5 h-5" />
               </button>
-              <h3 className="text-xl font-semibold text-text-primary">Оставить отзыв</h3>
+              <h3 className="text-xl font-medium text-text-primary">Оставить отзыв</h3>
               <div className="mt-6">
                 <ReviewForm variant="modal" onCancel={() => setShowForm(false)} onSuccess={handleFormSuccess} />
               </div>

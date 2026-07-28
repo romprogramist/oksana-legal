@@ -39,8 +39,8 @@ export default function ServicesCarousel({ services }: { services: Service[] }) 
         <AnimatedSection animation="fade-up">
           <div className="flex items-end justify-between mb-10">
             <div>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-text-primary uppercase">Наши услуги</h2>
-              <p className="text-2xl md:text-3xl text-text-secondary mt-1">полный спектр</p>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium text-text-primary">Наши услуги</h2>
+              <p className="text-xl md:text-2xl text-text-secondary mt-2">полный спектр</p>
               <div className="flex gap-3 mt-4">
                 <span className="px-4 py-1.5 border border-text-secondary/30 rounded-full text-sm text-text-secondary">+ Законно</span>
                 <span className="px-4 py-1.5 border border-text-secondary/30 rounded-full text-sm text-text-secondary">+ Без стресса</span>
@@ -67,7 +67,7 @@ export default function ServicesCarousel({ services }: { services: Service[] }) 
                 )}
               </div>
               <div className="p-6 flex flex-col flex-1">
-                <h3 className="text-lg font-semibold text-text-primary leading-snug">{service.title}</h3>
+                <h3 className="text-lg font-medium text-text-primary leading-snug">{service.title}</h3>
                 {service.description && <p className="mt-3 text-sm text-text-secondary leading-relaxed line-clamp-3 flex-1">{service.description}</p>}
                 <ul className="mt-4 flex flex-wrap gap-2">
                   {service.tags.map((f) => (

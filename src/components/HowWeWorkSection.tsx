@@ -10,10 +10,10 @@ export default function HowWeWorkSection() {
       <div className="container-narrow">
         <AnimatedSection animation="fade-up">
           <div className="mb-12">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-text-primary uppercase">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium text-text-primary">
               Как мы работаем
             </h2>
-            <p className="text-2xl md:text-3xl text-text-secondary mt-1">
+            <p className="text-xl md:text-2xl text-text-secondary mt-2">
               удобные форматы
             </p>
             <div className="flex flex-wrap gap-3 mt-4">
@@ -43,7 +43,7 @@ export default function HowWeWorkSection() {
                   <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
                     <Icon className="w-6 h-6 text-primary" />
                   </div>
-                  <h3 className="text-lg font-semibold text-text-primary mb-2">
+                  <h3 className="text-lg font-medium text-text-primary mb-2">
                     {item.title}
                   </h3>
                   <p className="text-sm text-text-secondary leading-relaxed">
@@ -60,7 +60,7 @@ export default function HowWeWorkSection() {
             <div className="rounded-3xl bg-primary/5 border border-primary/10 p-6 md:p-8">
               <div className="flex items-center gap-3 mb-3">
                 <FileText className="w-5 h-5 text-primary" />
-                <h3 className="text-base font-semibold text-text-primary">
+                <h3 className="text-base font-medium text-text-primary">
                   Начало работы
                 </h3>
               </div>
@@ -72,7 +72,7 @@ export default function HowWeWorkSection() {
             <div className="rounded-3xl bg-primary/5 border border-primary/10 p-6 md:p-8">
               <div className="flex items-center gap-3 mb-4">
                 <Clock className="w-5 h-5 text-primary" />
-                <h3 className="text-base font-semibold text-text-primary">
+                <h3 className="text-base font-medium text-text-primary">
                   Сроки оказания услуг
                 </h3>
               </div>
