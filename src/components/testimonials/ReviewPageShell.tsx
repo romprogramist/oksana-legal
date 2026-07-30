@@ -7,8 +7,17 @@ export default function ReviewPageShell({ children }: { children: ReactNode }) {
     <div className="min-h-screen flex flex-col bg-background">
       <header className="bg-white border-b border-gray-100">
         <div className="container-narrow flex items-center justify-between h-14">
-          <Link href="/" className="font-display text-base md:text-lg font-medium tracking-tight text-text-primary hover:text-primary transition-colors">
-            Оксана Юрьевна
+          <Link
+            href="/"
+            className="min-w-0 font-display font-medium tracking-tight leading-tight text-text-primary hover:text-primary transition-colors"
+          >
+            <span className="block sm:hidden text-[10px] uppercase tracking-wider opacity-80">
+              ИП Абаджян
+            </span>
+            <span className="block truncate sm:hidden text-sm">Оксана Юрьевна</span>
+            <span className="hidden sm:block truncate text-sm md:text-base">
+              ИП Абаджян Оксана Юрьевна
+            </span>
           </Link>
           <a
             href={CONTACT.phoneHref}

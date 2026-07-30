@@ -9,15 +9,12 @@ export default function CasesSection() {
     <section id="cases" className="section-padding">
       <div className="container-narrow">
         <AnimatedSection animation="fade-up">
-          <div className="text-center mb-12">
-            <p className="text-sm font-medium text-primary uppercase tracking-wider">
-              Результаты
-            </p>
-            <h2 className="mt-2 text-3xl md:text-4xl font-medium text-primary">
+          <div className="mb-10">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium text-text-primary">
               Примеры завершённых дел
             </h2>
-            <p className="mt-3 text-text-secondary max-w-2xl mx-auto">
-              Реальные дела наших клиентов с подтверждёнными результатами
+            <p className="text-xl md:text-2xl text-text-secondary mt-2">
+              реальные результаты
             </p>
           </div>
         </AnimatedSection>

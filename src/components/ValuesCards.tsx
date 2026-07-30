@@ -5,11 +5,11 @@ import AnimatedSection from "./AnimatedSection";
 
 export default function ValuesCards() {
   return (
-    <section className="pb-16 md:pb-24">
+    <section className="pt-9 md:pt-[3.375rem] lg:pt-[4.5rem] pb-16 md:pb-24">
       <div className="container-narrow">
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-2 gap-4">
           {VALUES.map((value, i) => (
-            <AnimatedSection key={i} animation="fade-up" delay={i * 100}>
+            <AnimatedSection key={i} animation="fade-up" delay={i * 100} className="min-w-0">
               <div
                 className={cn(
                   "rounded-3xl p-8 h-full flex flex-col justify-between min-h-[220px]",
@@ -21,7 +21,7 @@ export default function ValuesCards() {
                 <div>
                   <h3
                     className={cn(
-                      "text-xl font-medium",
+                      "text-lg sm:text-xl font-medium hyphens-auto break-words",
                       value.variant === "accent" ? "text-white" : "text-text-primary"
                     )}
                   >

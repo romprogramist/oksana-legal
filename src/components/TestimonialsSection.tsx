@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Star, Quote, X } from "lucide-react";
+import { Star, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import AnimatedSection from "./AnimatedSection";
 import ReviewForm from "./testimonials/ReviewForm";
@@ -14,9 +14,56 @@ interface Testimonial {
   createdAt: string;
 }
 
+const PAGE_SIZE = 3;
+
+function Stars({ rating }: { rating: number }) {
+  return (
+    <div className="flex gap-0.5">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <Star key={star} className={cn("w-3.5 h-3.5", star <= rating ? "fill-yellow-400 text-yellow-400" : "text-gray-200")} />
+      ))}
+    </div>
+  );
+}
+
+function TestimonialCard({ item }: { item: Testimonial }) {
+  const [expanded, setExpanded] = useState(false);
+  // Отзывы бывают до 1000 символов — в свёрнутом виде показываем первые строки.
+  const isLong = item.content.length > 180;
+
+  return (
+    <div className="h-full bg-white rounded-2xl shadow-soft border-t-4 border-primary p-4 flex flex-col">
+      <Stars rating={item.rating} />
+
+      <p className={cn("mt-2.5 text-sm text-text-secondary leading-relaxed whitespace-pre-line", !expanded && "line-clamp-4")}>
+        {item.content}
+      </p>
+
+      {isLong && (
+        <button
+          onClick={() => setExpanded((v) => !v)}
+          className="mt-1.5 self-start text-xs font-medium text-primary hover:underline"
+        >
+          {expanded ? "Свернуть" : "Читать полностью"}
+        </button>
+      )}
+
+      <div className="mt-auto pt-3 flex items-center gap-2.5">
+        <div className="w-8 h-8 shrink-0 rounded-full bg-primary/10 flex items-center justify-center text-primary text-sm font-semibold">
+          {item.name[0]}
+        </div>
+        <div className="min-w-0">
+          <p className="text-sm font-medium text-text-primary truncate">{item.name}</p>
+          <p className="text-xs text-text-secondary">{new Date(item.createdAt).toLocaleDateString("ru-RU")}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function TestimonialsSection() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [visible, setVisible] = useState(PAGE_SIZE);
   const [showForm, setShowForm] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
@@ -29,9 +76,6 @@ export default function TestimonialsSection() {
 
   useEffect(() => { fetchTestimonials(); }, []);
 
-  const handlePrev = () => setActiveIndex((p) => (p === 0 ? testimonials.length - 1 : p - 1));
-  const handleNext = () => setActiveIndex((p) => (p === testimonials.length - 1 ? 0 : p + 1));
-
   const handleFormSuccess = () => {
     setShowForm(false);
     setShowSuccess(true);
@@ -39,14 +83,15 @@ export default function TestimonialsSection() {
     setTimeout(() => setShowSuccess(false), 5000);
   };
 
+  const hiddenCount = testimonials.length - visible;
+
   return (
     <section id="testimonials" className="section-padding">
       <div className="container-narrow">
         <AnimatedSection animation="fade-up">
-          <div className="text-center mb-12">
-            <p className="text-sm font-medium text-primary uppercase tracking-wider">Отзывы клиентов</p>
-            <h2 className="mt-2 text-3xl md:text-4xl font-medium text-text-primary">Истории успеха наших клиентов</h2>
-            <p className="mt-3 text-text-secondary">Более 500 клиентов уже освободились от долгов с нашей помощью</p>
+          <div className="mb-10">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium text-text-primary">Отзывы клиентов</h2>
+            <p className="text-xl md:text-2xl text-text-secondary mt-2">истории успеха</p>
           </div>
         </AnimatedSection>
 
@@ -57,41 +102,26 @@ export default function TestimonialsSection() {
         )}
 
         {testimonials.length > 0 ? (
-          <AnimatedSection animation="fade-up" delay={100}>
-            <div className="relative max-w-2xl mx-auto">
-              <div className="bg-white rounded-3xl shadow-soft p-8 md:p-10">
-                <Quote className="w-8 h-8 text-primary/20" />
-                <div className="flex gap-0.5 mt-4">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star key={star} className={cn("w-5 h-5", star <= testimonials[activeIndex].rating ? "fill-yellow-400 text-yellow-400" : "text-gray-200")} />
-                  ))}
-                </div>
-                <p className="mt-4 text-text-primary leading-relaxed text-lg">&laquo;{testimonials[activeIndex].content}&raquo;</p>
-                <div className="mt-6 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">{testimonials[activeIndex].name[0]}</div>
-                  <div>
-                    <p className="font-semibold text-text-primary">{testimonials[activeIndex].name}</p>
-                    <p className="text-xs text-text-secondary">{new Date(testimonials[activeIndex].createdAt).toLocaleDateString("ru-RU")}</p>
-                  </div>
-                </div>
-              </div>
-              {testimonials.length > 1 && (
-                <div className="flex items-center justify-center gap-4 mt-6">
-                  <button onClick={handlePrev} className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:border-primary hover:text-primary transition-colors"><ChevronLeft className="w-5 h-5" /></button>
-                  <div className="flex gap-2">
-                    {testimonials.map((_, i) => (<button key={i} onClick={() => setActiveIndex(i)} className={cn("w-2.5 h-2.5 rounded-full transition-colors", i === activeIndex ? "bg-primary" : "bg-gray-300")} />))}
-                  </div>
-                  <button onClick={handleNext} className="w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:border-primary hover:text-primary transition-colors"><ChevronRight className="w-5 h-5" /></button>
-                </div>
-              )}
+          <AnimatedSection animation="fade-up" delay={50}>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {testimonials.slice(0, visible).map((item) => (
+                <TestimonialCard key={item.id} item={item} />
+              ))}
             </div>
           </AnimatedSection>
         ) : (
           <p className="text-center text-text-secondary">Пока нет отзывов. Будьте первым, кто оставит отзыв!</p>
         )}
 
-        <div className="mt-8 text-center">
-          <button onClick={() => setShowForm(true)} className="px-6 py-3 bg-accent text-white rounded-full font-medium hover:bg-accent-dark transition-colors">Оставить отзыв</button>
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
+          {hiddenCount > 0 && (
+            <button onClick={() => setVisible((v) => v + PAGE_SIZE)} className="text-primary font-medium text-sm hover:underline">
+              Показать ещё {Math.min(hiddenCount, PAGE_SIZE)} из {hiddenCount}
+            </button>
+          )}
+          <button onClick={() => setShowForm(true)} className="px-5 py-2.5 bg-accent text-white rounded-full text-sm font-medium hover:bg-accent-dark transition-colors">
+            Оставить отзыв
+          </button>
         </div>
 
         {showForm && (

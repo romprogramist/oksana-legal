@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
-import WhyUsSection from "@/components/WhyUsSection";
 import ValuesCards from "@/components/ValuesCards";
 import QuizSection from "@/components/QuizSection";
 import ServicesSection from "@/components/ServicesSection";
@@ -53,7 +52,6 @@ export default async function Home() {
       <Header />
       <main>
         <HeroSection />
-        <WhyUsSection />
         <ValuesCards />
         <QuizSection />
         <ServicesSection />

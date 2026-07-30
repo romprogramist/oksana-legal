@@ -37,13 +37,12 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="section-padding">
+    <section id="contact" className="section-padding overflow-x-clip">
       <div className="container-narrow">
         <AnimatedSection animation="fade-up">
-          <div className="text-center mb-12">
-            <p className="text-sm font-medium text-primary uppercase tracking-wider">Контакты</p>
-            <h2 className="mt-2 text-3xl md:text-4xl font-medium text-text-primary">Свяжитесь с нами</h2>
-            <p className="mt-3 text-text-secondary">Получите бесплатную консультацию прямо сейчас</p>
+          <div className="mb-10">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium text-text-primary">Свяжитесь с нами</h2>
+            <p className="text-xl md:text-2xl text-text-secondary mt-2">бесплатная консультация</p>
           </div>
         </AnimatedSection>
 

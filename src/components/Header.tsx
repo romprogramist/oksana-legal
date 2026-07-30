@@ -97,17 +97,24 @@ export default function Header() {
         <a
           href="#hero"
           className={cn(
-            "flex items-center rounded-md transition-transform duration-300 hover:scale-[1.02] motion-reduce:hover:scale-100 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+            "flex min-w-0 items-center rounded-md transition-transform duration-300 hover:scale-[1.02] motion-reduce:hover:scale-100 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
             solid ? "focus-visible:ring-primary/40" : "focus-visible:ring-white/40"
           )}
         >
           <span
             className={cn(
-              "font-display text-base md:text-lg font-medium tracking-tight transition-colors duration-500 motion-reduce:transition-none",
+              "min-w-0 font-display font-medium tracking-tight leading-tight transition-colors duration-500 motion-reduce:transition-none",
               solid ? "text-text-primary" : "text-white"
             )}
           >
-            Оксана Юрьевна
+            {/* На телефоне название не влезает в одну строку рядом с бургером — разбиваем на две. */}
+            <span className="block sm:hidden text-[10px] uppercase tracking-wider opacity-80">
+              ИП Абаджян
+            </span>
+            <span className="block truncate sm:hidden text-sm">Оксана Юрьевна</span>
+            <span className="hidden sm:block truncate text-sm md:text-base">
+              ИП Абаджян Оксана Юрьевна
+            </span>
           </span>
         </a>
 
